@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigasi_jadwal"
+        android:icon="@drawable/ic_library_books_black_24dp"
+        android:title="Jadwal" />
+    <item
+        android:id="@+id/navigasi_informasi"
+        android:icon="@drawable/ic_library_music_black_24dp"
+        android:title="Informasi" />
+
+</menu>
