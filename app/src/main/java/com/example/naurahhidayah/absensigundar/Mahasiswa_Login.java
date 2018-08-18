@@ -95,8 +95,8 @@ public class Mahasiswa_Login extends AppCompatActivity {
                         Log.d("coba", dataStatus);
 
 //                        String dataToken = jsonObject.getString("token");
-                        session.setSession(jsonObject.getString("id"));
-
+                        session.setIdNpm(jsonObject.getString("npm"));
+                            session.setIdKelas(jsonObject.getString("kelas"));
 
                         new CountDownTimer(1000, 1000) {
 

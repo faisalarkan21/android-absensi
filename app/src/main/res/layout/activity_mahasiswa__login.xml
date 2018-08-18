@@ -28,6 +28,7 @@
             android:id="@+id/username"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
+            android:text="naurah@gmail.com"
             android:drawableLeft="@drawable/ic_person_outline_black_24dp"
             android:drawablePadding="10dp"
             android:hint="USERNAME" />
@@ -36,6 +37,7 @@
             android:id="@+id/password"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
+            android:text="123456"
             android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
             android:drawablePadding="10dp"
             android:hint="PASSWORD"

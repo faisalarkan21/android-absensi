@@ -23,6 +23,14 @@ public class SessionManager {
         prefs.edit().putString("idJadwal", id).apply();
     }
 
+    public void setIdNpm(String npm) {
+        prefs.edit().putString("npm", npm).apply();
+    }
+
+    public void setIdKelas(String kelas) {
+        prefs.edit().putString("kelas", kelas).apply();
+    }
+
     public String getToken() {
         String token = prefs.getString("token","");
         return token;
@@ -31,6 +39,17 @@ public class SessionManager {
     public String getIdJadwal() {
         String token = prefs.getString("idJadwal","");
         return token;
+    }
+
+    public String getIdNpm() {
+        String token = prefs.getString("npm","");
+        return token;
+    }
+
+    public String getIdKelas(){
+        String token = prefs.getString("kelas","");
+        return token;
+
     }
 
     public void setFirstTimeLaunch(boolean isFirstTime) {

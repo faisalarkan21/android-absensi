@@ -3,8 +3,14 @@ package com.example.naurahhidayah.absensigundar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,13 +22,18 @@ import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;
 import com.naurah.utils.SessionManager;
 
+import org.json.JSONObject;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MhsSchedule extends Activity {
     // Log tag
@@ -37,14 +48,33 @@ public class MhsSchedule extends Activity {
     private CustomListAdapter adapter;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mhs_schedule);
         listView = (ListView) findViewById(R.id.list);
         adapter = new CustomListAdapter(this, scheduleList);
-        adapter.setmContext(this);
-        listView.setAdapter(adapter);
+
+
+        RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
+
+        rv.setHasFixedSize(true);
+
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+
+        rv.setLayoutManager(mLayoutManager);
+
+        rv.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+
+        rv.setItemAnimator(new DefaultItemAnimator());
+        rv.setAdapter(adapter);
+
+        rv.setVisibility(View.VISIBLE);
+
+
 
 
         session = new SessionManager(getApplicationContext());
@@ -57,8 +87,9 @@ public class MhsSchedule extends Activity {
         // Showing progress dialog before making http request
 
 
+
         mApiService = ApiUtils.getAPIService();
-        Call<JsonObject> response = mApiService.getAllJadwal();
+        Call<JsonObject> response = mApiService.getAllJadwal(session.getIdKelas());
         // changing action bar color
 //        getActionBar().setBackgroundDrawable(
 //                new ColorDrawable(Color.parseColor("#1b1b1b")));
@@ -68,7 +99,7 @@ public class MhsSchedule extends Activity {
 
         response.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> rawResponse) {
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> rawResponse) {
 
                 if (rawResponse.isSuccessful()) {
                     try {

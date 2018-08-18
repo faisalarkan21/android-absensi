@@ -5,101 +5,99 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 //import com.example.naurahhidayah.absensigundar.Mhs_LocationFragment;
+import com.example.naurahhidayah.absensigundar.MhsLocation;
 import com.example.naurahhidayah.absensigundar.Mhs_LocationFragment;
 import com.example.naurahhidayah.absensigundar.R;
 import com.naurah.model.Schedule;
 import com.naurah.utils.SessionManager;
 
-public class CustomListAdapter extends BaseAdapter {
-    private Activity activity;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
+public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.MyViewHolder> {
+
+
     private LayoutInflater inflater;
     private List<Schedule> scheduleItems;
     private Context mContext;
     SessionManager session;
-    //Constuctor
+
     public CustomListAdapter(Activity activity, List<Schedule> scheduleItems) {
-        this.activity = activity;
+        this.mContext = activity;
         this.scheduleItems = scheduleItems;
-        session = new SessionManager(activity.getApplication());
+        this.session = new SessionManager(activity.getApplication());
     }
 
 
+
+    @NonNull
     @Override
-    public int getCount() {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_row,parent, false);
+        return new MyViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+        Schedule m = scheduleItems.get(position);
+
+        holder.title.setText(m.getTitle());
+        holder.dosen.setText(m.getDosen());
+        holder.genre.setText(m.getPlaceAndTime());
+        holder.year.setText(m.getYear());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.d("inidia", Integer.toString(position));
+
+                session.setIdJadwal(Integer.toString(position + 1));
+                Intent i = new Intent(mContext, MhsLocation.class);
+                mContext.startActivity(i);
+
+
+
+
+            }
+        });
+
+    }
+
+    @Override
+    public int getItemCount() {
         return scheduleItems.size();
     }
 
-    @Override
-    public Object getItem(int location) {
-        return scheduleItems.get(location);
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView title;
+        public TextView dosen;
+        public TextView genre;
+        public TextView year;
+        public NetworkImageView thumbNail;
+
+
+        public MyViewHolder(View view) {
+            super(view);
+            thumbNail = (NetworkImageView) view
+                    .findViewById(R.id.thumbnail);
+             title = (TextView) view.findViewById(R.id.title);
+             dosen = (TextView) view.findViewById(R.id.dosen);
+             genre = (TextView) view.findViewById(R.id.genre);
+             year = (TextView) view.findViewById(R.id.releaseYear);
+        }
     }
 
-    @Override
-    public long getItemId(int position) {
-        Log.d("test4", "disini posisi" + position );
-
-        Intent i = new Intent(getmContext(), Mhs_LocationFragment.class);
-        getmContext().startActivity(i);
-        session.setIdJadwal(Integer.toString(position));
-        i.putExtra("id_jadwal", position);
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-//        Log.d("test3", "disini posisi" + position );
-
-        if (inflater == null)
-            inflater = (LayoutInflater) activity
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (convertView == null)
-            convertView = inflater.inflate(R.layout.list_row, null);
-
-
-        NetworkImageView thumbNail = (NetworkImageView) convertView
-                .findViewById(R.id.thumbnail);
-        TextView title = (TextView) convertView.findViewById(R.id.title);
-        TextView dosen = (TextView) convertView.findViewById(R.id.dosen);
-        TextView genre = (TextView) convertView.findViewById(R.id.genre);
-        TextView year = (TextView) convertView.findViewById(R.id.releaseYear);
-
-        // getting movie data for the row
-        Schedule m = scheduleItems.get(position);
-
-        // thumbnail image
-//        thumbNail.setImageUrl(m.getThumbnailUrl());
-
-        // title
-        title.setText(m.getTitle());
-
-        // dosen
-        dosen.setText("Dosen: " +m.getDosen());
-
-        // genre
-        genre.setText(m.getPlaceAndTime());
-
-
-        // release year
-        year.setText(m.getYear());
-
-        return convertView;
-    }
-
-    public Context getmContext() {
-        return mContext;
-    }
-
-    public void setmContext(Context mContext) {
-        this.mContext = mContext;
-    }
 }

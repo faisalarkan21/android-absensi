@@ -2,6 +2,7 @@ package com.example.naurahhidayah.absensigundar;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Handler;
@@ -257,11 +258,12 @@ public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback
 
             request.put("id_jadwal_kelas", session.getIdJadwal());
 
-            Toast.makeText(MhsLocation.this, session.getIdJadwal(), Toast.LENGTH_LONG).show();
 
             request.put("longitude", assetLocation.longitude);
             request.put("latitude", assetLocation.latitude);
-            request.put("id", session.getToken());
+            request.put("kelas", session.getIdKelas());
+            request.put("npm", session.getIdNpm());
+            request.put("address", mEtAssetAddress.getText().toString());
 
 
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), request.toString());
@@ -272,14 +274,17 @@ public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     progressDialog.dismiss();
                     if (response.isSuccessful()) {
-                        finish();
+                        Toast.makeText(MhsLocation.this, "Penyimpanan Lokasi Berhasil!", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(MhsLocation.this, MhsMain.class));
+
+
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     progressDialog.dismiss();
-                    Toast.makeText(MhsLocation.this, "Gagal Membuat asset", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MhsLocation.this, "Penyimpanan Lokasi Gagal!", Toast.LENGTH_SHORT).show();
                 }
             });
 

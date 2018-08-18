@@ -43,10 +43,10 @@ public class CustomListAdapterMain extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        Log.d("test4", "disini posisi" + position );
-
-        Intent i = new Intent(getmContext(), DosenMain.class);
-        getmContext().startActivity(i);
+//        Log.d("test4", "disini posisi" + position );
+//
+//        Intent i = new Intent(getmContext(), DosenMain.class);
+//        getmContext().startActivity(i);
         return position;
     }
 

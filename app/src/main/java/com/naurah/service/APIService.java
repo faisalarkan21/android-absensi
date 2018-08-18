@@ -27,7 +27,7 @@ public interface APIService {
                                     @Query("key") String key);
 
     @GET("/api/jadwal-mhs")
-    Call<JsonObject> getAllJadwal();
+    Call<JsonObject> getAllJadwal(@Query("kelas") String params);
 
     @GET("/api/jadwal-dosen")
     Call<JsonObject> getMainAllJadwal();
