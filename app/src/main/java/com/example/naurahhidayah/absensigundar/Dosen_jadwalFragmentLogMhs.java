@@ -7,14 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
-public class Dosen_JadwalFragment extends Fragment implements View.OnClickListener {
+/**
+ * Created by faisal on 8/27/18.
+ */
+
+public class Dosen_jadwalFragmentLogMhs extends Fragment implements View.OnClickListener {
 
 
     View v;
-    Button btn_dosenjadwal;
+    Button btn_dosennotice;
 
-    public Dosen_JadwalFragment() {
+    public Dosen_jadwalFragmentLogMhs() {
         // Required empty public constructor
     }
 
@@ -22,9 +27,9 @@ public class Dosen_JadwalFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_dosen__jadwal, container, false);
-        btn_dosenjadwal = (Button)v.findViewById(R.id.btn_dosenjadwal);
-        btn_dosenjadwal.setOnClickListener(this);
+        v = inflater.inflate(R.layout.fragment_dosen__jadwal_log_mhs, container, false);
+        btn_dosennotice = (Button)v.findViewById(R.id.btn_dosenjadwal);
+        btn_dosennotice.setOnClickListener(this);
         // Inflate the layout for this fragment
         return v;
     }
@@ -34,9 +39,11 @@ public class Dosen_JadwalFragment extends Fragment implements View.OnClickListen
         switch (v.getId()){
             case R.id.btn_dosenjadwal:
                 Intent dosenjadwal = new Intent(getActivity(), DosenSchedule.class);
-                dosenjadwal.putExtra("isLogMhs", false);
+                dosenjadwal.putExtra("isLogMhs", true);
                 startActivity(dosenjadwal);
                 break;
         }
     }
+
+
 }

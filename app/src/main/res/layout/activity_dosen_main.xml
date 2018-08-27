@@ -18,7 +18,7 @@
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigasi"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation"
+        app:menu="@menu/navigation_dosen"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

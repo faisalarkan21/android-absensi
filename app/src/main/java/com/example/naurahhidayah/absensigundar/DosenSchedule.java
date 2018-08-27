@@ -2,10 +2,15 @@ package com.example.naurahhidayah.absensigundar;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,6 +21,7 @@ import com.naurah.adapter.CustomListAdapterMain;
 import com.naurah.model.Schedule;
 import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;
+import com.naurah.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,19 +38,38 @@ public class DosenSchedule extends Activity {
     ProgressDialog progressDialog;
     private List<Schedule> scheduleList = new ArrayList<Schedule>();
     private ListView listView;
-    private CustomListAdapterMain adapterMain;
-
+    private CustomListAdapter adapter;
+    SessionManager session;
+    boolean isLogMhs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dosen_schedule);
-        listView = (ListView) findViewById(R.id.list);
-        adapterMain = new CustomListAdapterMain(this, scheduleList);
-        adapterMain.setmContext(this);
-        listView.setAdapter(adapterMain);
+        Intent intent = getIntent();
+        isLogMhs = intent.getBooleanExtra("isLogMhs", false);
+        adapter = new CustomListAdapter(this, scheduleList, isLogMhs);
+
+        RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
+
+        rv.setHasFixedSize(true);
 
 
+
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+
+        rv.setLayoutManager(mLayoutManager);
+
+        rv.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+
+        rv.setItemAnimator(new DefaultItemAnimator());
+        rv.setAdapter(adapter);
+
+        rv.setVisibility(View.VISIBLE);
+
+
+        session = new SessionManager(getApplicationContext());
 
 
         progressDialog = new ProgressDialog(DosenSchedule.this);
@@ -55,7 +80,7 @@ public class DosenSchedule extends Activity {
 
 
         mApiService = ApiUtils.getAPIService();
-        Call<JsonObject> response = mApiService.getMainAllJadwal();
+        Call<JsonObject> response = mApiService.getAllJadwalDosen(session.getIdDosen());
         // changing action bar color
 //        getActionBar().setBackgroundDrawable(
 //                new ColorDrawable(Color.parseColor("#1b1b1b")));
@@ -81,18 +106,19 @@ public class DosenSchedule extends Activity {
                             Schedule schedule = new Schedule();
                             JsonObject Data = jsonArray.get(i).getAsJsonObject();
                             Log.d("Data", jsonArray.toString());
-
+                            schedule.setIdJadwal(Data.get("id_jadwal").getAsString());
+                            schedule.setNip(Data.get("nip").getAsString());
                             schedule.setTitle(Data.get("matkul").getAsString());
                             schedule.setDosen(Data.get("kelas").getAsString());
                             schedule.setYear(Data.get("hari").getAsString());
-                            schedule.setPlaceAndTime(Data.get("ruang").getAsString() + Data.get("waktu").getAsString());
+                            schedule.setPlaceAndTime(Data.get("ruang").getAsString() + " Jam Ke - " + Data.get("waktu").getAsString());
 
                             scheduleList.add(schedule);
 
 
                         }
 
-                        adapterMain.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
 
                         progressDialog.dismiss();
 

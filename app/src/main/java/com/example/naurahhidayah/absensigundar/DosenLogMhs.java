@@ -2,6 +2,7 @@ package com.example.naurahhidayah.absensigundar;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -15,8 +16,8 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.naurah.adapter.CustomListAdapter;
-import com.naurah.model.Schedule;
+import com.naurah.adapter.CustomListAdapterLogMhs;
+import com.naurah.model.Mahasiswa;
 import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;
 import com.naurah.utils.SessionManager;
@@ -26,34 +27,33 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 
-public class MhsSchedule extends Activity {
+public class DosenLogMhs extends Activity {
     // Log tag
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity2.class.getSimpleName();
     APIService mApiService;
-    SessionManager session;
     // Movies json url\
     //private static final String url = "https://api.androidhive.info/json/movies.json";
     ProgressDialog progressDialog;
-    private List<Schedule> scheduleList = new ArrayList<Schedule>();
+    private List<Mahasiswa> mhsList = new ArrayList<Mahasiswa>();
     private ListView listView;
-    private CustomListAdapter adapter;
-
-
-
+    private CustomListAdapterLogMhs adapter;
+    SessionManager session;
+    boolean isLogMhs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mhs_schedule);
-
-        adapter = new CustomListAdapter(this, scheduleList, false);
-
+        setContentView(R.layout.activity_mhs_log);
+        Intent intent = getIntent();
+        isLogMhs = intent.getBooleanExtra("isLogMhs", false);
+        adapter = new CustomListAdapterLogMhs(this, mhsList, isLogMhs);
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
 
         rv.setHasFixedSize(true);
+
+
 
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -68,12 +68,11 @@ public class MhsSchedule extends Activity {
         rv.setVisibility(View.VISIBLE);
 
 
-
-
         session = new SessionManager(getApplicationContext());
 
+        String idKelas = intent.getStringExtra("kelas");
 
-        progressDialog = new ProgressDialog(MhsSchedule.this);
+        progressDialog = new ProgressDialog(DosenLogMhs.this);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("Sedang Menyiapkan Data");
         progressDialog.show();
@@ -82,7 +81,7 @@ public class MhsSchedule extends Activity {
 
 
         mApiService = ApiUtils.getAPIService();
-        Call<JsonObject> response = mApiService.getAllJadwalMhs(session.getIdKelas());
+        Call<JsonObject> response = mApiService.getAllMahasiswa(idKelas, session.getIdJadwal());
         // changing action bar color
 //        getActionBar().setBackgroundDrawable(
 //                new ColorDrawable(Color.parseColor("#1b1b1b")));
@@ -92,33 +91,27 @@ public class MhsSchedule extends Activity {
 
         response.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> rawResponse) {
+            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> rawResponse) {
 
                 if (rawResponse.isSuccessful()) {
                     try {
                         JsonArray jsonArray = rawResponse.body().get("data").getAsJsonArray();
 
                         if (jsonArray.size() == 0) {
-                            Toast.makeText(MhsSchedule.this, "Tidak ada data.",
+                            Toast.makeText(DosenLogMhs.this, "Tidak ada data.",
                                     Toast.LENGTH_LONG).show();
                         }
                         Log.d("TEST", jsonArray.toString());
                         for (int i = 0; i < jsonArray.size(); i++) {
 
-
-                            Schedule schedule = new Schedule();
+                            Mahasiswa mhs = new Mahasiswa();
                             JsonObject Data = jsonArray.get(i).getAsJsonObject();
                             Log.d("Data", jsonArray.toString());
-
-                            schedule.setTitle(Data.get("matkul").getAsString());
-                            schedule.setIdJadwal(Data.get("id").getAsString());
-
-
-                            schedule.setDosen(Data.get("dosen").getAsString());
-                            schedule.setYear(Data.get("hari").getAsString());
-                            schedule.setPlaceAndTime(Data.get("ruang").getAsString() + Data.get("waktu").getAsString());
-
-                            scheduleList.add(schedule);
+                            mhs.setNama(Data.get("nama").getAsString());
+                            mhs.setKelas(Data.get("kelas").getAsString());
+                            mhs.setNpm(Data.get("npm").getAsString());
+                            mhs.setTime(Data.get("date_on_sign") != null ? Data.get("date_on_sign").getAsString() : "Belum Input Lokasi");
+                            mhsList.add(mhs);
 
 
                         }
@@ -131,7 +124,7 @@ public class MhsSchedule extends Activity {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(MhsSchedule.this, rawResponse.toString(),
+                    Toast.makeText(DosenLogMhs.this, rawResponse.toString(),
                             Toast.LENGTH_LONG).show();
                 }
 
@@ -140,7 +133,7 @@ public class MhsSchedule extends Activity {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable throwable) {
-                Toast.makeText(MhsSchedule.this, throwable.getMessage(),
+                Toast.makeText(DosenLogMhs.this, throwable.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
         });

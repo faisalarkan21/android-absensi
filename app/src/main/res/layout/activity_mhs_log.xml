@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DosenSchedule" >
+    android:id="@+id/activity_dosen_log_mhs"
+    tools:context=".DosenLogMhs" >
 
-    <include layout="@layout/content_matkul" />
+    <include layout="@layout/content_log_mhs" />
+
 
 </RelativeLayout>

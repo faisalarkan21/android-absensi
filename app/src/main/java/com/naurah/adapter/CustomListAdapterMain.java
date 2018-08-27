@@ -15,6 +15,7 @@ import com.example.naurahhidayah.absensigundar.DosenMain;
 import com.example.naurahhidayah.absensigundar.Mhs_LocationFragment;
 import com.example.naurahhidayah.absensigundar.R;
 import com.naurah.model.Schedule;
+import com.naurah.utils.SessionManager;
 
 import java.util.List;
 
@@ -23,11 +24,13 @@ public class CustomListAdapterMain extends BaseAdapter {
     private LayoutInflater inflater;
     private List<Schedule> scheduleItems;
     private Context mContext;
+    SessionManager session;
 
     //Constuctor
     public CustomListAdapterMain(Activity activity, List<Schedule> scheduleItems) {
         this.activity = activity;
         this.scheduleItems = scheduleItems;
+        session = new SessionManager(activity.getApplicationContext());
     }
 
 
@@ -62,8 +65,7 @@ public class CustomListAdapterMain extends BaseAdapter {
             convertView = inflater.inflate(R.layout.list_row, null);
 
 
-        NetworkImageView thumbNail = (NetworkImageView) convertView
-                .findViewById(R.id.thumbnail);
+
         TextView title = (TextView) convertView.findViewById(R.id.title);
         TextView dosen = (TextView) convertView.findViewById(R.id.dosen);
         TextView genre = (TextView) convertView.findViewById(R.id.genre);
@@ -79,7 +81,10 @@ public class CustomListAdapterMain extends BaseAdapter {
         title.setText(m.getTitle());
 
         // dosen
-        dosen.setText("Dosen: " +m.getDosen());
+        if (Boolean.parseBoolean(session.getIdDosen())){
+            dosen.setText("Dosen: " +m.getDosen());
+        }
+
 
         // genre
         genre.setText(m.getPlaceAndTime());

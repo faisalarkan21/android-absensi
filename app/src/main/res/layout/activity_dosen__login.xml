@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_person_outline_black_24dp"
             android:drawablePadding="10dp"
+            android:text="saefudin@yahoo.com"
             android:hint="USERNAME" />
 
         <EditText
@@ -39,6 +40,7 @@
             android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
             android:drawablePadding="10dp"
             android:hint="PASSWORD"
+            android:text="123456"
             android:inputType="textPassword" />
 
         <Button

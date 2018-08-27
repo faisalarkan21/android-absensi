@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -80,7 +81,6 @@ public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mhs_location);
 
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mEtAssetAddress = (EditText) findViewById(R.id.editTextLocation);
@@ -99,7 +99,7 @@ public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback
             }
         });
         session = new SessionManager(getApplicationContext());
-
+        Log.d("cekdosen", session.getNipDosen());
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.asset_map);
@@ -256,26 +256,55 @@ public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback
             JSONObject request = new JSONObject();
             Schedule schedule = new Schedule();
 
+
+
             request.put("id_jadwal_kelas", session.getIdJadwal());
 
 
             request.put("longitude", assetLocation.longitude);
             request.put("latitude", assetLocation.latitude);
             request.put("kelas", session.getIdKelas());
-            request.put("npm", session.getIdNpm());
+
+            if (!session.getNipDosen().isEmpty()){
+                request.put("nip", session.getNipDosen());
+            }else{
+                request.put("npm", session.getIdNpm());
+            }
+
+
             request.put("address", mEtAssetAddress.getText().toString());
 
-
+            Call<ResponseBody> res = null;
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), request.toString());
 
-            Call<ResponseBody> res = mApiSevice.saveMapMhs(requestBody);
+            if (!session.getNipDosen().isEmpty()){
+                res = mApiSevice.saveMapDosen(requestBody);
+                Log.d("save", "save dosen");
+                Log.d("savedosen", session.getNipDosen());
+            }else{
+                res = mApiSevice.saveMapMhs(requestBody);
+                Log.d("save", "save mhs");
+            }
+
+
+
             res.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     progressDialog.dismiss();
                     if (response.isSuccessful()) {
                         Toast.makeText(MhsLocation.this, "Penyimpanan Lokasi Berhasil!", Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(MhsLocation.this, MhsMain.class));
+
+
+                        if (!session.getNipDosen().isEmpty()){
+                            startActivity(new Intent(MhsLocation.this, DosenMain.class));
+
+                        }else{
+                            startActivity(new Intent(MhsLocation.this, MhsMain.class));
+
+                        }
+
+
 
 
                     }

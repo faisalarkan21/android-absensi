@@ -1,7 +1,11 @@
 package com.example.naurahhidayah.absensigundar;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -21,11 +25,25 @@ public class DosenMain extends AppCompatActivity {
                     fragmentdosenjadwalTransaction.commit();
 
                     return true;
+                case R.id.navigasi_jadwal_cek_mhs:
+                    Dosen_jadwalFragmentLogMhs dosen_jadwalFragmentLogMhs = new Dosen_jadwalFragmentLogMhs();
+                    android.support.v4.app.FragmentTransaction fragmentdosenjadwalTransactionLog = getSupportFragmentManager().beginTransaction();
+                    fragmentdosenjadwalTransactionLog.replace(R.id.content, dosen_jadwalFragmentLogMhs);
+                    fragmentdosenjadwalTransactionLog.commit();
+
+                    return true;
                 case R.id.navigasi_informasi:
                     Dosen_InfoFragment dosen_infoFragment = new Dosen_InfoFragment();
                     android.support.v4.app.FragmentTransaction fragmentdoseninfoTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentdoseninfoTransaction.replace(R.id.content, dosen_infoFragment);
                     fragmentdoseninfoTransaction.commit();
+
+                    return true;
+                case R.id.navigasi_logout:
+                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).
+                            edit().clear().apply();
+                    Intent login = new Intent(DosenMain.this, Dosen_Login.class);
+                    startActivity(login);
 
                     return true;
             }

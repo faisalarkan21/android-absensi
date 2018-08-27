@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 //import com.example.naurahhidayah.absensigundar.Mhs_LocationFragment;
+import com.example.naurahhidayah.absensigundar.DosenLogMhs;
 import com.example.naurahhidayah.absensigundar.MhsLocation;
 import com.example.naurahhidayah.absensigundar.Mhs_LocationFragment;
 import com.example.naurahhidayah.absensigundar.R;
@@ -32,47 +33,66 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.My
     private List<Schedule> scheduleItems;
     private Context mContext;
     SessionManager session;
+    boolean isLogMhs;
 
-    public CustomListAdapter(Activity activity, List<Schedule> scheduleItems) {
+    public CustomListAdapter(Activity activity, List<Schedule> scheduleItems, Boolean isLogMhs) {
         this.mContext = activity;
         this.scheduleItems = scheduleItems;
         this.session = new SessionManager(activity.getApplication());
+        this.isLogMhs = isLogMhs;
     }
-
 
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_row,parent, false);
+                .inflate(R.layout.list_row, parent, false);
         return new MyViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        Schedule m = scheduleItems.get(position);
+        final Schedule m = scheduleItems.get(position);
 
         holder.title.setText(m.getTitle());
         holder.dosen.setText(m.getDosen());
         holder.genre.setText(m.getPlaceAndTime());
         holder.year.setText(m.getYear());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if (isLogMhs) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                Log.d("inidia", Integer.toString(position));
-
-                session.setIdJadwal(Integer.toString(position + 1));
-                Intent i = new Intent(mContext, MhsLocation.class);
-                mContext.startActivity(i);
+                    Log.d("inidia", Integer.toString(position));
 
 
+                    session.setIdJadwal(m.getIdJadwal());
+                    Intent i = new Intent(mContext, DosenLogMhs.class);
+                    i.putExtra("kelas", m.getDosen());
+                    mContext.startActivity(i);
 
 
-            }
-        });
+                }
+            });
+        } else {
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Log.d("inidia", Integer.toString(position));
+
+
+                    session.setIdJadwal(m.getIdJadwal());
+                    Intent i = new Intent(mContext, MhsLocation.class);
+                    mContext.startActivity(i);
+
+
+                }
+            });
+        }
 
     }
 
@@ -91,12 +111,11 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.My
 
         public MyViewHolder(View view) {
             super(view);
-            thumbNail = (NetworkImageView) view
-                    .findViewById(R.id.thumbnail);
-             title = (TextView) view.findViewById(R.id.title);
-             dosen = (TextView) view.findViewById(R.id.dosen);
-             genre = (TextView) view.findViewById(R.id.genre);
-             year = (TextView) view.findViewById(R.id.releaseYear);
+
+            title = (TextView) view.findViewById(R.id.title);
+            dosen = (TextView) view.findViewById(R.id.dosen);
+            genre = (TextView) view.findViewById(R.id.genre);
+            year = (TextView) view.findViewById(R.id.releaseYear);
         }
     }
 

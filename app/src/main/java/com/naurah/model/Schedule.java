@@ -8,6 +8,7 @@ public class Schedule {
     private String dosen;
     private String placeAndTime;
     private String idJadwal;
+    private String nip;
 
     public Schedule() {
     }
@@ -20,6 +21,7 @@ public class Schedule {
         this.dosen = dosen;
         this.placeAndTime = placeAndTime;
     }
+
 
     public String getIdJadwal() {
         return idJadwal;
@@ -62,11 +64,20 @@ public class Schedule {
     }
 
 
+
     public String getPlaceAndTime() {
         return placeAndTime;
     }
 
     public void setPlaceAndTime(String placeAndTime) {
         this.placeAndTime = placeAndTime;
+    }
+
+    public String getNip() {
+        return nip;
+    }
+
+    public void setNip(String nip) {
+        this.nip = nip;
     }
 }

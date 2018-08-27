@@ -31,13 +31,32 @@ public class SessionManager {
         prefs.edit().putString("kelas", kelas).apply();
     }
 
+    public void setNipDosen(String nipDosen) {
+        prefs.edit().putString("nipDosen", nipDosen).apply();
+    }
+
+    public void setIdDosen(String idDosen) {
+        prefs.edit().putString("idDosen", idDosen).apply();
+    }
+
     public String getToken() {
         String token = prefs.getString("token","");
         return token;
     }
 
+
+    public String getNipDosen() {
+        String token = prefs.getString("nipDosen","");
+        return token;
+    }
+
     public String getIdJadwal() {
         String token = prefs.getString("idJadwal","");
+        return token;
+    }
+
+    public String getIdDosen() {
+        String token = prefs.getString("idDosen","");
         return token;
     }
 

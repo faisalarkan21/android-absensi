@@ -51,6 +51,7 @@
         <activity android:name=".DosenSchedule" />
         <activity android:name=".DosenNotice" />
         <activity android:name=".MhsValidation"></activity>
+        <activity android:name=".DosenLogMhs"></activity>
     </application>
 
 </manifest>

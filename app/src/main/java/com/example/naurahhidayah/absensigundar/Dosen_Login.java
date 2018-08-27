@@ -82,7 +82,7 @@ public class Dosen_Login extends AppCompatActivity {
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (new JSONObject(jsonParams)).toString());
 
 
-        Call<ResponseBody> response = mApiService.mainloginPost( body);
+        Call<ResponseBody> response = mApiService.loginPostDosen(body);
 
         response.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -94,9 +94,14 @@ public class Dosen_Login extends AppCompatActivity {
                         final String dataStatus = jsonObject.getString("isValid");
                         Log.d("coba", dataStatus);
 
-                        String dataToken = jsonObject.getString("token");
-                        session.setSession(dataToken);
+                        if (!Boolean.parseBoolean(dataStatus)){
+                            Toast.makeText(Dosen_Login.this, "Password / Username Salah",
+                                    Toast.LENGTH_LONG).show();
+                            return;
+                        }
 
+                        session.setNipDosen(jsonObject.getString("nip"));
+                        session.setIdDosen(jsonObject.getString("id"));
                         new CountDownTimer(1000, 1000) {
 
                             public void onTick(long millisUntilFinished) {

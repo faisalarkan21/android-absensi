@@ -1,6 +1,10 @@
 package com.example.naurahhidayah.absensigundar;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +31,14 @@ public class MhsMain extends AppCompatActivity {
                     fragmentmhsinfoTransaction.commit();
 
                     return true;
+
+                case R.id.navigasi_logout:
+                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).
+                            edit().clear().apply();
+                    Intent login = new Intent(MhsMain.this, Mahasiswa_Login.class);
+                    startActivity(login);
+
+
             }
             return false;
         }

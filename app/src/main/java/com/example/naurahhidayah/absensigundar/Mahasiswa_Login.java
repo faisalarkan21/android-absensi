@@ -82,7 +82,7 @@ public class Mahasiswa_Login extends AppCompatActivity {
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (new JSONObject(jsonParams)).toString());
 
 
-        Call<ResponseBody> response = mApiService.loginPost( body);
+        Call<ResponseBody> response = mApiService.loginPostMhs( body);
 
         response.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -93,6 +93,15 @@ public class Mahasiswa_Login extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(rawResponse.body().string());
                         final String dataStatus = jsonObject.getString("isValid");
                         Log.d("coba", dataStatus);
+
+
+                        if (!Boolean.parseBoolean(dataStatus)){
+                            Toast.makeText(Mahasiswa_Login.this, "Password / Username Salah",
+                                    Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+
 
 //                        String dataToken = jsonObject.getString("token");
                         session.setIdNpm(jsonObject.getString("npm"));
