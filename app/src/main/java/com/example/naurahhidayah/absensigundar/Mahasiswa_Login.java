@@ -35,6 +35,7 @@ public class Mahasiswa_Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mahasiswa__login);
 
+        //pada saat tombol home ditekan
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

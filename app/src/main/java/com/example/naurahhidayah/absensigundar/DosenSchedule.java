@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.naurah.adapter.CustomListAdapter;
-import com.naurah.adapter.CustomListAdapterMain;
 import com.naurah.model.Schedule;
 import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;

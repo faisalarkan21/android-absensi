@@ -32,6 +32,14 @@ public class MhsMain extends AppCompatActivity {
 
                     return true;
 
+                case R.id.navigasi_jadwal_cek_mhs:
+                    Mhs_JadwalFragmentLogMhs mhs_jadwalfragmentLogMhs = new Mhs_JadwalFragmentLogMhs();
+                    android.support.v4.app.FragmentTransaction fragmentmhsjadwalTransactionLog = getSupportFragmentManager().beginTransaction();
+                    fragmentmhsjadwalTransactionLog.replace(R.id.content, mhs_jadwalfragmentLogMhs);
+                    fragmentmhsjadwalTransactionLog.commit();
+
+                    return true;
+
                 case R.id.navigasi_logout:
                     PreferenceManager.getDefaultSharedPreferences(getBaseContext()).
                             edit().clear().apply();

@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AbsensiGundar.iml" filepath="$PROJECT_DIR$/AbsensiGundar.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-absensi.iml" filepath="$PROJECT_DIR$/android-absensi.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

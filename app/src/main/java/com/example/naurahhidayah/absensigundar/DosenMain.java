@@ -32,13 +32,6 @@ public class DosenMain extends AppCompatActivity {
                     fragmentdosenjadwalTransactionLog.commit();
 
                     return true;
-                case R.id.navigasi_informasi:
-                    Dosen_InfoFragment dosen_infoFragment = new Dosen_InfoFragment();
-                    android.support.v4.app.FragmentTransaction fragmentdoseninfoTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentdoseninfoTransaction.replace(R.id.content, dosen_infoFragment);
-                    fragmentdoseninfoTransaction.commit();
-
-                    return true;
                 case R.id.navigasi_logout:
                     PreferenceManager.getDefaultSharedPreferences(getBaseContext()).
                             edit().clear().apply();

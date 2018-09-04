@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.android.volley.toolbox.NetworkImageView;
 //import com.example.naurahhidayah.absensigundar.Mhs_LocationFragment;
 import com.example.naurahhidayah.absensigundar.DosenLogMhs;
+import com.example.naurahhidayah.absensigundar.LogMahasiswa;
 import com.example.naurahhidayah.absensigundar.MhsLocation;
 import com.example.naurahhidayah.absensigundar.Mhs_LocationFragment;
 import com.example.naurahhidayah.absensigundar.R;
@@ -34,12 +35,14 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.My
     private Context mContext;
     SessionManager session;
     boolean isLogMhs;
+    boolean isHistoryMhs;
 
     public CustomListAdapter(Activity activity, List<Schedule> scheduleItems, Boolean isLogMhs) {
         this.mContext = activity;
         this.scheduleItems = scheduleItems;
         this.session = new SessionManager(activity.getApplication());
         this.isLogMhs = isLogMhs;
+        this.isHistoryMhs = isHistoryMhs;
     }
 
 
@@ -61,6 +64,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.My
         holder.year.setText(m.getYear());
 
         if (isLogMhs) {
+            // ngambil jadwal kelas mhs, mahasiswanya,....
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,7 +81,42 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.My
                 }
             });
         } else {
+            // buat absen dosen,....
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
+                    Log.d("inidia", Integer.toString(position));
+
+
+                    session.setIdJadwal(m.getIdJadwal());
+                    Intent i = new Intent(mContext, MhsLocation.class);
+                    mContext.startActivity(i);
+
+
+                }
+            });
+        }
+
+        if (isHistoryMhs) {
+            // ngambil jadwal kelas mhs, mahasiswanya,....
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Log.d("inidia", Integer.toString(position));
+
+
+                    session.setIdJadwal(m.getIdJadwal());
+                    Intent i = new Intent(mContext, LogMahasiswa.class);
+                    i.putExtra("kelas", m.getDosen());
+                    mContext.startActivity(i);
+
+
+                }
+            });
+        } else {
+            // buat absen dosen,....
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -53,8 +53,8 @@ public class CustomListAdapterLogMhs extends RecyclerView.Adapter<CustomListAdap
         final Mahasiswa m = mhsItems.get(position);
 
         holder.title.setText(m.getNama());
-        holder.dosen.setText(m.getNpm());
-        holder.genre.setText(m.getKelas());
+        holder.dosen.setText("NPM :" + m.getNpm());
+//        holder.genre.setText(m.getKelas());
         holder.year.setText(m.getTime());
 
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {

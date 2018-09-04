@@ -49,9 +49,9 @@
         <activity android:name=".MhsSchedule" />
         <activity android:name=".Mhs_LocationFragment" />
         <activity android:name=".DosenSchedule" />
-        <activity android:name=".DosenNotice" />
-        <activity android:name=".MhsValidation"></activity>
-        <activity android:name=".DosenLogMhs"></activity>
+        <activity android:name=".DosenLogMhs" />
+        <activity android:name=".LogMahasiswa" />
+        <activity android:name=".Mhs_JadwalFragmentLogMhs"></activity>
     </application>
 
 </manifest>

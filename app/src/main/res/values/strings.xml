@@ -35,6 +35,9 @@
     <string name="jadwal_dosen">JADWAL</string>
     <string name="jadwal_dosen_desc">Lihat daftar mahasiswa yang hadir berdasarkan mata kuliah dan kelas</string>
 
+    <string name="jadwal_dosen_log">LOG MAHASISWA</string>
+    <string name="jadwal_dosen_log_desc">Lihat daftar mahasiswa yang hadir berdasarkan mata kuliah dan kelas</string>
+
     <string name="info_dosen">INFORMASI</string>
     <string name="info_dosen_desc">Berikan informasi/pemberitahuan kepada kelas yang bersangkutan</string>
 
