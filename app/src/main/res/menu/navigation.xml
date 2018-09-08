@@ -6,9 +6,9 @@
         android:icon="@drawable/ic_library_books_black_24dp"
         android:title="Jadwal" />
     <item
-        android:id="@+id/navigasi_informasi"
+        android:id="@+id/navigasi_mhs_cek_log"
         android:icon="@drawable/ic_library_music_black_24dp"
-        android:title="Informasi" />
+        android:title="Log Absen Anda" />
 
     <item
         android:id="@+id/navigasi_logout"

@@ -16,7 +16,7 @@
     </FrameLayout>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigasi"
+        android:id="@+id/navigasi_mhs"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation"
         android:layout_gravity="bottom"

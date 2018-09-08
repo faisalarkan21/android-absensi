@@ -52,7 +52,7 @@ public class MhsSchedule extends Activity {
         Intent intent = getIntent();
         isHistoryMhs = intent.getBooleanExtra("isHistoryMhs", false);
         adapter = new CustomListAdapter(this, scheduleList, isHistoryMhs);
-        adapter = new CustomListAdapter(this, scheduleList, false);
+
 
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
@@ -83,71 +83,142 @@ public class MhsSchedule extends Activity {
         progressDialog.show();
         // Showing progress dialog before making http request
 
-
-
-        mApiService = ApiUtils.getAPIService();
-        Call<JsonObject> response = mApiService.getAllJadwalMhs(session.getIdKelas());
-        // changing action bar color
+        if (isHistoryMhs){
+            mApiService = ApiUtils.getAPIService();
+            Call<JsonObject> response = mApiService.getAllLogMhsByNpm(session.getIdNpm());
+            // changing action bar color
 //        getActionBar().setBackgroundDrawable(
 //                new ColorDrawable(Color.parseColor("#1b1b1b")));
 
-        // Creating volley request obj
+            // Creating volley request obj
 
 
-        response.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> rawResponse) {
+            response.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> rawResponse) {
 
-                if (rawResponse.isSuccessful()) {
-                    try {
-                        JsonArray jsonArray = rawResponse.body().get("data").getAsJsonArray();
+                    if (rawResponse.isSuccessful()) {
+                        try {
+                            JsonArray jsonArray = rawResponse.body().get("data").getAsJsonArray();
 
-                        if (jsonArray.size() == 0) {
-                            Toast.makeText(MhsSchedule.this, "Tidak ada data.",
-                                    Toast.LENGTH_LONG).show();
+                            if (jsonArray.size() == 0) {
+                                Toast.makeText(MhsSchedule.this, "Tidak ada data.",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                            Log.d("TEST", jsonArray.toString());
+                            for (int i = 0; i < jsonArray.size(); i++) {
+//
+//
+                                Schedule schedule = new Schedule();
+                                JsonObject Data = jsonArray.get(i).getAsJsonObject();
+                                Log.d("Data", jsonArray.toString());
+
+                                schedule.setTitle(Data.get("matkul").getAsString());
+                                schedule.setIdJadwal(Data.get("id").getAsString());
+
+
+                                schedule.setDosen(Data.get("dosen").getAsString());
+                                schedule.setYear(Data.get("hari").getAsString());
+                                schedule.setPlaceAndTime(Data.get("ruang").getAsString() + Data.get("waktu").getAsString());
+
+                                scheduleList.add(schedule);
+//
+//
+                            }
+
+                            adapter.notifyDataSetChanged();
+
+                            progressDialog.dismiss();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        Log.d("TEST", jsonArray.toString());
-                        for (int i = 0; i < jsonArray.size(); i++) {
-
-
-                            Schedule schedule = new Schedule();
-                            JsonObject Data = jsonArray.get(i).getAsJsonObject();
-                            Log.d("Data", jsonArray.toString());
-
-                            schedule.setTitle(Data.get("matkul").getAsString());
-                            schedule.setIdJadwal(Data.get("id").getAsString());
-
-
-                            schedule.setDosen(Data.get("dosen").getAsString());
-                            schedule.setYear(Data.get("hari").getAsString());
-                            schedule.setPlaceAndTime(Data.get("ruang").getAsString() + Data.get("waktu").getAsString());
-
-                            scheduleList.add(schedule);
-
-
-                        }
-
-                        adapter.notifyDataSetChanged();
-
-                        progressDialog.dismiss();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        Toast.makeText(MhsSchedule.this, rawResponse.toString(),
+                                Toast.LENGTH_LONG).show();
                     }
-                } else {
-                    Toast.makeText(MhsSchedule.this, rawResponse.toString(),
-                            Toast.LENGTH_LONG).show();
+
+
                 }
 
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable throwable) {
+                    Toast.makeText(MhsSchedule.this, throwable.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
 
-            }
+        }else{
 
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable throwable) {
-                Toast.makeText(MhsSchedule.this, throwable.getMessage(),
-                        Toast.LENGTH_LONG).show();
-            }
-        });
+            mApiService = ApiUtils.getAPIService();
+            Call<JsonObject> response = mApiService.getAllJadwalMhs(session.getIdKelas());
+            // changing action bar color
+//        getActionBar().setBackgroundDrawable(
+//                new ColorDrawable(Color.parseColor("#1b1b1b")));
+
+            // Creating volley request obj
+
+
+            response.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> rawResponse) {
+
+                    if (rawResponse.isSuccessful()) {
+                        try {
+                            JsonArray jsonArray = rawResponse.body().get("data").getAsJsonArray();
+
+                            if (jsonArray.size() == 0) {
+                                Toast.makeText(MhsSchedule.this, "Tidak ada data.",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                            Log.d("TEST", jsonArray.toString());
+                            for (int i = 0; i < jsonArray.size(); i++) {
+
+
+                                Schedule schedule = new Schedule();
+                                JsonObject Data = jsonArray.get(i).getAsJsonObject();
+                                Log.d("Data", jsonArray.toString());
+
+                                schedule.setTitle(Data.get("matkul").getAsString());
+                                schedule.setIdJadwal(Data.get("id").getAsString());
+
+
+                                schedule.setDosen(Data.get("dosen").getAsString());
+                                schedule.setYear(Data.get("hari").getAsString());
+                                schedule.setPlaceAndTime(Data.get("ruang").getAsString() + Data.get("waktu").getAsString());
+
+                                scheduleList.add(schedule);
+
+
+                            }
+
+                            adapter.notifyDataSetChanged();
+
+                            progressDialog.dismiss();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(MhsSchedule.this, rawResponse.toString(),
+                                Toast.LENGTH_LONG).show();
+                    }
+
+
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable throwable) {
+                    Toast.makeText(MhsSchedule.this, throwable.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+
+
+        }
+
+
+
 
 
     }

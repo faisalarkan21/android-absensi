@@ -32,7 +32,7 @@ public class MhsMain extends AppCompatActivity {
 
                     return true;
 
-                case R.id.navigasi_jadwal_cek_mhs:
+                case R.id.navigasi_mhs_cek_log:
                     Mhs_JadwalFragmentLogMhs mhs_jadwalfragmentLogMhs = new Mhs_JadwalFragmentLogMhs();
                     android.support.v4.app.FragmentTransaction fragmentmhsjadwalTransactionLog = getSupportFragmentManager().beginTransaction();
                     fragmentmhsjadwalTransactionLog.replace(R.id.content, mhs_jadwalfragmentLogMhs);
@@ -63,7 +63,7 @@ public class MhsMain extends AppCompatActivity {
         fragmentTransaction.commit();
 
 
-        BottomNavigationView BNV = (BottomNavigationView) findViewById(R.id.navigasi);
+        BottomNavigationView BNV = (BottomNavigationView) findViewById(R.id.navigasi_mhs);
         BNV.setOnNavigationItemSelectedListener(botnav);
     }
 }

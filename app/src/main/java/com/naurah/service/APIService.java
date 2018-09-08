@@ -42,8 +42,11 @@ public interface APIService {
     Call<JsonObject> getAllJadwalDosen(@Query("id") String idDosen);
 
     @GET("/api/get-all-log-mhs")
-    Call<JsonObject> getAllLogMhs(@Query("id_jadwal") String idJadwalKelas);
+    Call<JsonObject> getAllLogMhsByNpm(@Query("npm") String npm);
 
+
+    @POST("/update-mhs-log-validation")
+    Call<ResponseBody> updateLogMgsIsValid(@Body RequestBody npm);
 
 
 }

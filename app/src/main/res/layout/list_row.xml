@@ -47,4 +47,13 @@
         android:textColor="@color/year"
         android:textSize="@dimen/year" />
 
+    <!--<ImageView-->
+        <!--android:id="@+id/iv_users_options"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginEnd="2.2dp"-->
+        <!--android:src="@drawable/ic_beenhere" />-->
+
 </RelativeLayout>
