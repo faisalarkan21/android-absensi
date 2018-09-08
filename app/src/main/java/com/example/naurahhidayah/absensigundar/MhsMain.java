@@ -24,13 +24,6 @@ public class MhsMain extends AppCompatActivity {
                     fragmentmhsjadwalTransaction.commit();
 
                     return true;
-                case R.id.navigasi_informasi:
-                    Mhs_InfoFragment mhs_infoFragment = new Mhs_InfoFragment();
-                    android.support.v4.app.FragmentTransaction fragmentmhsinfoTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentmhsinfoTransaction.replace(R.id.content, mhs_infoFragment);
-                    fragmentmhsinfoTransaction.commit();
-
-                    return true;
 
                 case R.id.navigasi_mhs_cek_log:
                     Mhs_JadwalFragmentLogMhs mhs_jadwalfragmentLogMhs = new Mhs_JadwalFragmentLogMhs();

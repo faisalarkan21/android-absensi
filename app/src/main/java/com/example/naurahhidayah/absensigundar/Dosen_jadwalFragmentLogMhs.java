@@ -9,10 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-/**
- * Created by faisal on 8/27/18.
- */
-
 public class Dosen_jadwalFragmentLogMhs extends Fragment implements View.OnClickListener {
 
 

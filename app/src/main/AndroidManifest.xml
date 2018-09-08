@@ -45,7 +45,6 @@
         <activity android:name=".MhsMain" />
         <activity android:name=".DosenMain" />
         <activity android:name=".MhsLocation" />
-        <activity android:name=".MhsDatePicker" />
         <activity android:name=".MhsSchedule" />
         <activity android:name=".Mhs_LocationFragment" />
         <activity android:name=".DosenSchedule" />

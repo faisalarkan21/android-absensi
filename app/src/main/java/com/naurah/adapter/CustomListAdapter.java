@@ -62,10 +62,8 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.My
         holder.dosen.setText(m.getDosen());
         holder.genre.setText(m.getPlaceAndTime());
         holder.year.setText(m.getYear());
-
-        if (isLogMhs) {
-            // ngambil jadwal kelas mhs, mahasiswanya,....
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+        Log.d("testlog", String.valueOf(isLogMhs));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -80,58 +78,77 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.My
 
                 }
             });
-        } else {
-            // buat absen dosen,....
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Log.d("inidia", Integer.toString(position));
 
 
-                    session.setIdJadwal(m.getIdJadwal());
-                    Intent i = new Intent(mContext, MhsLocation.class);
-                    mContext.startActivity(i);
-
-
-                }
-            });
-        }
-
-        if (isHistoryMhs) {
-            // ngambil jadwal kelas mhs, mahasiswanya,....
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Log.d("inidia", Integer.toString(position));
-
-
-                    session.setIdJadwal(m.getIdJadwal());
-                    Intent i = new Intent(mContext, LogMahasiswa.class);
-                    i.putExtra("kelas", m.getDosen());
-                    mContext.startActivity(i);
-
-
-                }
-            });
-        } else {
-            // buat absen dosen,....
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Log.d("inidia", Integer.toString(position));
-
-
-                    session.setIdJadwal(m.getIdJadwal());
-                    Intent i = new Intent(mContext, MhsLocation.class);
-                    mContext.startActivity(i);
-
-
-                }
-            });
-        }
+//        if (isLogMhs) {
+//            // ngambil jadwal kelas mhs, mahasiswanya,....
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    Log.d("inidia", Integer.toString(position));
+//
+//
+//                    session.setIdJadwal(m.getIdJadwal());
+//                    Intent i = new Intent(mContext, DosenLogMhs.class);
+//                    i.putExtra("kelas", m.getDosen());
+//                    mContext.startActivity(i);
+//
+//
+//                }
+//            });
+//        } else {
+//            // buat absen dosen,....
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    Log.d("inidia", Integer.toString(position));
+//
+//
+//                    session.setIdJadwal(m.getIdJadwal());
+//                    Intent i = new Intent(mContext, MhsLocation.class);
+//                    mContext.startActivity(i);
+//
+//
+//                }
+//            });
+//        }
+//
+//        if (isHistoryMhs) {
+//            // ngambil jadwal kelas mhs, mahasiswanya,....
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    Log.d("inidia", Integer.toString(position));
+//
+//
+//                    session.setIdJadwal(m.getIdJadwal());
+//                    Intent i = new Intent(mContext, LogMahasiswa.class);
+//                    i.putExtra("kelas", m.getDosen());
+//                    mContext.startActivity(i);
+//
+//
+//                }
+//            });
+//        } else {
+//            // buat absen dosen,....
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    Log.d("inidia", Integer.toString(position));
+//
+//
+//                    session.setIdJadwal(m.getIdJadwal());
+//                    Intent i = new Intent(mContext, MhsLocation.class);
+//                    mContext.startActivity(i);
+//
+//
+//                }
+//            });
+//        }
 
     }
 

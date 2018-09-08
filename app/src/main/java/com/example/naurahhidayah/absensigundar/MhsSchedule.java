@@ -40,7 +40,7 @@ public class MhsSchedule extends Activity {
     private List<Schedule> scheduleList = new ArrayList<Schedule>();
     private ListView listView;
     private CustomListAdapter adapter;
-    boolean isHistoryMhs;
+    boolean isLogMhs;
 
 
 
@@ -50,8 +50,8 @@ public class MhsSchedule extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mhs_schedule);
         Intent intent = getIntent();
-        isHistoryMhs = intent.getBooleanExtra("isHistoryMhs", false);
-        adapter = new CustomListAdapter(this, scheduleList, isHistoryMhs);
+        isLogMhs = intent.getBooleanExtra("isLogMhs", false);
+        adapter = new CustomListAdapter(this, scheduleList, isLogMhs);
 
 
 
@@ -83,9 +83,9 @@ public class MhsSchedule extends Activity {
         progressDialog.show();
         // Showing progress dialog before making http request
 
-        if (isHistoryMhs){
+        if (isLogMhs){
             mApiService = ApiUtils.getAPIService();
-            Call<JsonObject> response = mApiService.getAllLogMhsByNpm(session.getIdNpm());
+            Call<JsonObject> response = mApiService.getAllJadwalMhs(session.getIdKelas());
             // changing action bar color
 //        getActionBar().setBackgroundDrawable(
 //                new ColorDrawable(Color.parseColor("#1b1b1b")));
@@ -151,7 +151,7 @@ public class MhsSchedule extends Activity {
         }else{
 
             mApiService = ApiUtils.getAPIService();
-            Call<JsonObject> response = mApiService.getAllJadwalMhs(session.getIdKelas());
+            Call<JsonObject> response = mApiService.getAllLogMhsByNpm(session.getIdNpm());
             // changing action bar color
 //        getActionBar().setBackgroundDrawable(
 //                new ColorDrawable(Color.parseColor("#1b1b1b")));
