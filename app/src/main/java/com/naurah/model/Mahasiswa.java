@@ -9,6 +9,24 @@ public class Mahasiswa {
     private String npm;
     private String kelas;
     private String time;
+    private Boolean isVerified;
+    private  String idLog;
+
+    public String getIdLog() {
+        return idLog;
+    }
+
+    public void setIdLog(String idLog) {
+        this.idLog = idLog;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
+    }
 
     public String getNama() {
         return nama;

@@ -61,7 +61,7 @@ public class AdapterLogInDosenMhsInit extends RecyclerView.Adapter<AdapterLogInD
                 @Override
                 public void onClick(View v) {
                     Log.d("inidia", Integer.toString(position));
-                    session.setIdJadwal(m.getIdMhs());
+                    session.setIdJadwal(m.getIdJadwal());
                     Intent i = new Intent(mContext, DosenLogMhs.class);
                     i.putExtra("kelas", m.getDosen());
                     mContext.startActivity(i);

@@ -50,8 +50,8 @@ public interface APIService {
     @GET("/api/get-all-log-dsn")
     Call<JsonObject> getAllLogDosen(@Query("id_kelas") String id, @Query("id_jadwal") String jadwal, @Query("nip") String nip);
 
-    @POST("/update-mhs-log-validation")
-    Call<ResponseBody> updateLogMgsIsValid(@Body RequestBody npm);
+    @POST("/api/update-mhs-log-validation")
+    Call<ResponseBody> updateLogMgsIsValid(@Body RequestBody idLog);
 
 
 }

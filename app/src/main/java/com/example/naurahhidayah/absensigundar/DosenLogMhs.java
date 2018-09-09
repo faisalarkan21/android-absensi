@@ -104,10 +104,32 @@ public class DosenLogMhs extends Activity {
                             Mahasiswa mhs = new Mahasiswa();
                             JsonObject Data = jsonArray.get(i).getAsJsonObject();
                             Log.d("Data", jsonArray.toString());
+
+                            if(Data.get("id_log_mahasiswa").isJsonNull()){
+                                mhs.setIdLog(null);
+                            }else {
+                                mhs.setIdLog(Data.get("id_log_mahasiswa").getAsString());
+                            }
+
+
+
                             mhs.setNama(Data.get("nama").getAsString());
                             mhs.setKelas(Data.get("kelas").getAsString());
                             mhs.setNpm(Data.get("npm").getAsString());
-                            mhs.setTime(Data.get("date_on_sign") != null ? Data.get("date_on_sign").getAsString() : "Belum Input Lokasi");
+                            if(Data.get("date_on_sign").isJsonNull()){
+                                mhs.setTime("Belum Input Lokasi");
+                            }else {
+                                mhs.setTime(Data.get("date_on_sign") != null ? Data.get("date_on_sign").getAsString() : "Belum Input Lokasi");
+                            }
+
+
+                            if(Data.get("isValid").isJsonNull()){
+                                mhs.setVerified(null);
+                            }else {
+                                mhs.setVerified(Data.get("isValid").getAsInt() == 1 ?  true : false);
+                            }
+
+
                             mhsList.add(mhs);
 
 
