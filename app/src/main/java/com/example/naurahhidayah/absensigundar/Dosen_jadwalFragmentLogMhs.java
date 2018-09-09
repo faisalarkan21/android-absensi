@@ -35,7 +35,7 @@ public class Dosen_jadwalFragmentLogMhs extends Fragment implements View.OnClick
         switch (v.getId()){
             case R.id.btn_dosenjadwal:
                 Intent dosenjadwal = new Intent(getActivity(), DosenSchedule.class);
-                dosenjadwal.putExtra("isLogMhs", true);
+                dosenjadwal.putExtra("isDosenLogMhs", true);
                 startActivity(dosenjadwal);
                 break;
         }

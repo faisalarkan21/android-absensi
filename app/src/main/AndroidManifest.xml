@@ -44,12 +44,13 @@
         <activity android:name=".Dosen_Login" />
         <activity android:name=".MhsMain" />
         <activity android:name=".DosenMain" />
-        <activity android:name=".MhsLocation" />
+        <activity android:name=".SaveLocation" />
         <activity android:name=".MhsSchedule" />
         <activity android:name=".Mhs_LocationFragment" />
         <activity android:name=".DosenSchedule" />
         <activity android:name=".DosenLogMhs" />
         <activity android:name=".LogMahasiswa" />
+        <activity android:name=".DosenLog" />
         <activity android:name=".Mhs_JadwalFragmentLogMhs"></activity>
     </application>
 

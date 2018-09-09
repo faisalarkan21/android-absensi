@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.naurah.adapter.CustomListAdapter;
+import com.naurah.adapter.AdapterLogDosenInit;
+import com.naurah.adapter.AdapterLogInDosenMhsInit;
+import com.naurah.adapter.AdapterToSaveLoc;
 import com.naurah.model.Schedule;
 import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;
@@ -37,109 +39,255 @@ public class DosenSchedule extends Activity {
     ProgressDialog progressDialog;
     private List<Schedule> scheduleList = new ArrayList<Schedule>();
     private ListView listView;
-    private CustomListAdapter adapter;
+    private AdapterLogInDosenMhsInit adapterLogMhsInit;
+    private AdapterLogDosenInit adapterLogDosenInit;
+    private AdapterToSaveLoc adapterLoc;
     SessionManager session;
-    boolean isLogMhs;
+    boolean isDosenLogMhs;
+    boolean isLogDosen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dosen_schedule);
         Intent intent = getIntent();
-        isLogMhs = intent.getBooleanExtra("isLogMhs", false);
-        adapter = new CustomListAdapter(this, scheduleList, isLogMhs);
-
-        RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
-
-        rv.setHasFixedSize(true);
+        isDosenLogMhs = intent.getBooleanExtra("isDosenLogMhs", false);
+        isLogDosen = intent.getBooleanExtra("isLogDosen", false);
 
 
+        if (isDosenLogMhs) {
+            adapterLogMhsInit = new AdapterLogInDosenMhsInit(this, scheduleList, isDosenLogMhs);
+            RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
+            rv.setHasFixedSize(true);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            rv.setLayoutManager(mLayoutManager);
+            rv.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+            rv.setItemAnimator(new DefaultItemAnimator());
+            rv.setAdapter(adapterLogMhsInit);
+            rv.setVisibility(View.VISIBLE);
+            session = new SessionManager(getApplicationContext());
+
+            progressDialog = new ProgressDialog(DosenSchedule.this);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Sedang Menyiapkan Data");
+            progressDialog.show();
+            // Showing progress dialog before making http request
 
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            mApiService = ApiUtils.getAPIService();
+            Call<JsonObject> response = mApiService.getAllJadwalDosen(session.getIdDosen());
 
-        rv.setLayoutManager(mLayoutManager);
+            response.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> rawResponse) {
 
-        rv.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+                    if (rawResponse.isSuccessful()) {
+                        try {
+                            JsonArray jsonArray = rawResponse.body().get("data").getAsJsonArray();
 
-        rv.setItemAnimator(new DefaultItemAnimator());
-        rv.setAdapter(adapter);
+                            if (jsonArray.size() == 0) {
+                                Toast.makeText(DosenSchedule.this, "Tidak ada data.",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                            Log.d("TEST", jsonArray.toString());
+                            for (int i = 0; i < jsonArray.size(); i++) {
 
-        rv.setVisibility(View.VISIBLE);
+                                Schedule schedule = new Schedule();
+                                JsonObject Data = jsonArray.get(i).getAsJsonObject();
+                                Log.d("Data", jsonArray.toString());
+                                schedule.setIdJadwal(Data.get("id_jadwal").getAsString());
+                                schedule.setNip(Data.get("nip").getAsString());
+                                schedule.setTitle(Data.get("matkul").getAsString());
+                                schedule.setDosen(Data.get("kelas").getAsString());
+                                schedule.setYear(Data.get("hari").getAsString());
+                                schedule.setPlaceAndTime(Data.get("ruang").getAsString() + " Jam Ke - " + Data.get("waktu").getAsString());
 
-
-        session = new SessionManager(getApplicationContext());
-
-
-        progressDialog = new ProgressDialog(DosenSchedule.this);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Sedang Menyiapkan Data");
-        progressDialog.show();
-        // Showing progress dialog before making http request
-
-
-        mApiService = ApiUtils.getAPIService();
-        Call<JsonObject> response = mApiService.getAllJadwalDosen(session.getIdDosen());
-        // changing action bar color
-//        getActionBar().setBackgroundDrawable(
-//                new ColorDrawable(Color.parseColor("#1b1b1b")));
-
-        // Creating volley request obj
+                                scheduleList.add(schedule);
 
 
-        response.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> rawResponse) {
+                            }
 
-                if (rawResponse.isSuccessful()) {
-                    try {
-                        JsonArray jsonArray = rawResponse.body().get("data").getAsJsonArray();
+                            adapterLogMhsInit.notifyDataSetChanged();
 
-                        if (jsonArray.size() == 0) {
-                            Toast.makeText(DosenSchedule.this, "Tidak ada data.",
-                                    Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        Log.d("TEST", jsonArray.toString());
-                        for (int i = 0; i < jsonArray.size(); i++) {
-
-                            Schedule schedule = new Schedule();
-                            JsonObject Data = jsonArray.get(i).getAsJsonObject();
-                            Log.d("Data", jsonArray.toString());
-                            schedule.setIdJadwal(Data.get("id_jadwal").getAsString());
-                            schedule.setNip(Data.get("nip").getAsString());
-                            schedule.setTitle(Data.get("matkul").getAsString());
-                            schedule.setDosen(Data.get("kelas").getAsString());
-                            schedule.setYear(Data.get("hari").getAsString());
-                            schedule.setPlaceAndTime(Data.get("ruang").getAsString() + " Jam Ke - " + Data.get("waktu").getAsString());
-
-                            scheduleList.add(schedule);
-
-
-                        }
-
-                        adapter.notifyDataSetChanged();
-
-                        progressDialog.dismiss();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        Toast.makeText(DosenSchedule.this, rawResponse.toString(),
+                                Toast.LENGTH_LONG).show();
                     }
-                } else {
-                    Toast.makeText(DosenSchedule.this, rawResponse.toString(),
-                            Toast.LENGTH_LONG).show();
+
+
                 }
 
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable throwable) {
-                Toast.makeText(DosenSchedule.this, throwable.getMessage(),
-                        Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable throwable) {
+                    Toast.makeText(DosenSchedule.this, throwable.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
 
 
+        } else if (isLogDosen) {
+
+            adapterLogDosenInit = new AdapterLogDosenInit(this, scheduleList, isLogDosen);
+            RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
+            rv.setHasFixedSize(true);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            rv.setLayoutManager(mLayoutManager);
+            rv.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+            rv.setItemAnimator(new DefaultItemAnimator());
+            rv.setAdapter(adapterLogDosenInit);
+            rv.setVisibility(View.VISIBLE);
+            session = new SessionManager(getApplicationContext());
+
+            progressDialog = new ProgressDialog(DosenSchedule.this);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Sedang Menyiapkan Data");
+            progressDialog.show();
+            // Showing progress dialog before making http request
+
+
+            mApiService = ApiUtils.getAPIService();
+            Call<JsonObject> response = mApiService.getAllJadwalDosen(session.getIdDosen());
+            response.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> rawResponse) {
+
+                    if (rawResponse.isSuccessful()) {
+                        try {
+                            JsonArray jsonArray = rawResponse.body().get("data").getAsJsonArray();
+
+                            if (jsonArray.size() == 0) {
+                                Toast.makeText(DosenSchedule.this, "Tidak ada data.",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                            Log.d("TEST1", jsonArray.toString());
+                            for (int i = 0; i < jsonArray.size(); i++) {
+
+                                Schedule schedule = new Schedule();
+                                JsonObject Data = jsonArray.get(i).getAsJsonObject();
+                                Log.d("Data", jsonArray.toString());
+                                schedule.setIdJadwal(Data.get("id_jadwal").getAsString());
+                                schedule.setNip(Data.get("nip").getAsString());
+                                schedule.setTitle(Data.get("matkul").getAsString());
+                                schedule.setDosen(Data.get("kelas").getAsString());
+                                schedule.setYear(Data.get("hari").getAsString());
+                                schedule.setPlaceAndTime(Data.get("ruang").getAsString() + " Jam Ke - " + Data.get("waktu").getAsString());
+                                scheduleList.add(schedule);
+                            }
+
+                            Log.d("TEST2", "Total" + scheduleList.size());
+
+                            adapterLogDosenInit.notifyDataSetChanged();
+                            progressDialog.dismiss();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(DosenSchedule.this, rawResponse.toString(),
+                                Toast.LENGTH_LONG).show();
+                    }
+
+
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable throwable) {
+                    Toast.makeText(DosenSchedule.this, throwable.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+
+
+        } else {
+
+            adapterLoc = new AdapterToSaveLoc(this, scheduleList, isDosenLogMhs);
+
+            RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
+
+            rv.setHasFixedSize(true);
+
+
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+
+            rv.setLayoutManager(mLayoutManager);
+
+            rv.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+
+            rv.setItemAnimator(new DefaultItemAnimator());
+            rv.setAdapter(adapterLoc);
+
+            rv.setVisibility(View.VISIBLE);
+
+
+            session = new SessionManager(getApplicationContext());
+
+
+            progressDialog = new ProgressDialog(DosenSchedule.this);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Sedang Menyiapkan Data");
+            progressDialog.show();
+            // Showing progress dialog before making http request
+
+
+            mApiService = ApiUtils.getAPIService();
+            Call<JsonObject> response = mApiService.getAllJadwalDosen(session.getIdDosen());
+            response.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> rawResponse) {
+
+                    if (rawResponse.isSuccessful()) {
+                        try {
+                            JsonArray jsonArray = rawResponse.body().get("data").getAsJsonArray();
+
+                            if (jsonArray.size() == 0) {
+                                Toast.makeText(DosenSchedule.this, "Tidak ada data.",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                            Log.d("TEST", jsonArray.toString());
+                            for (int i = 0; i < jsonArray.size(); i++) {
+
+                                Schedule schedule = new Schedule();
+                                JsonObject Data = jsonArray.get(i).getAsJsonObject();
+                                Log.d("Data", jsonArray.toString());
+                                schedule.setIdJadwal(Data.get("id_jadwal").getAsString());
+                                schedule.setNip(Data.get("nip").getAsString());
+                                schedule.setTitle(Data.get("matkul").getAsString());
+                                schedule.setDosen(Data.get("kelas").getAsString());
+                                schedule.setYear(Data.get("hari").getAsString());
+                                schedule.setPlaceAndTime(Data.get("ruang").getAsString() + " Jam Ke - " + Data.get("waktu").getAsString());
+
+                                scheduleList.add(schedule);
+
+
+                            }
+
+                            adapterLoc.notifyDataSetChanged();
+
+                            progressDialog.dismiss();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(DosenSchedule.this, rawResponse.toString(),
+                                Toast.LENGTH_LONG).show();
+                    }
+
+
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable throwable) {
+                    Toast.makeText(DosenSchedule.this, throwable.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     @Override
@@ -154,7 +302,6 @@ public class DosenSchedule extends Activity {
         // getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 
 
 }

@@ -27,9 +27,16 @@ public class DosenMain extends AppCompatActivity {
                     return true;
                 case R.id.navigasi_jadwal_cek_mhs:
                     Dosen_jadwalFragmentLogMhs dosen_jadwalFragmentLogMhs = new Dosen_jadwalFragmentLogMhs();
-                    android.support.v4.app.FragmentTransaction fragmentdosenjadwalTransactionLog = getSupportFragmentManager().beginTransaction();
-                    fragmentdosenjadwalTransactionLog.replace(R.id.content, dosen_jadwalFragmentLogMhs);
-                    fragmentdosenjadwalTransactionLog.commit();
+                    android.support.v4.app.FragmentTransaction fragmentdosenjadwalTransactionLogMhs = getSupportFragmentManager().beginTransaction();
+                    fragmentdosenjadwalTransactionLogMhs.replace(R.id.content, dosen_jadwalFragmentLogMhs);
+                    fragmentdosenjadwalTransactionLogMhs.commit();
+
+                    return true;
+                case R.id.navigasi_jadwal_log_dosen:
+                    Dosen_jadwalFragmentLogDosen dosen_jadwalFragmentLogDosen = new Dosen_jadwalFragmentLogDosen();
+                    android.support.v4.app.FragmentTransaction fragmentdosenjadwalTransactionLogDosen = getSupportFragmentManager().beginTransaction();
+                    fragmentdosenjadwalTransactionLogDosen.replace(R.id.content, dosen_jadwalFragmentLogDosen);
+                    fragmentdosenjadwalTransactionLogDosen.commit();
 
                     return true;
                 case R.id.navigasi_logout:

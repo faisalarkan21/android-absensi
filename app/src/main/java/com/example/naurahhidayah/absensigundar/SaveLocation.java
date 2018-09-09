@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,10 +42,8 @@ import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;
 import com.naurah.utils.SessionManager;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.RequestBody;
@@ -57,7 +54,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, EasyPermissions.PermissionCallbacks, View.OnClickListener {
+public class SaveLocation extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, EasyPermissions.PermissionCallbacks, View.OnClickListener {
 
     private static final int LOCATION_REQUEST = 201;
     private final static int LOCATION_SETTING_RC = 122;
@@ -87,7 +84,7 @@ public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback
 
         btnSubmitLokasi = (Button) findViewById(R.id.btn_submit_location);
 
-        progressDialog = new ProgressDialog(MhsLocation.this);
+        progressDialog = new ProgressDialog(SaveLocation.this);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("Sedang Menyiapkan Data");
         progressDialog.show();
@@ -172,7 +169,7 @@ public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback
                                 // Show the dialog by calling startResolutionForResult(),
                                 // and check the result in onActivityResult().
                                 status.startResolutionForResult(
-                                        MhsLocation.this, LOCATION_SETTING_RC);
+                                        SaveLocation.this, LOCATION_SETTING_RC);
                             } catch (IntentSender.SendIntentException e) {
                                 e.printStackTrace();
                             }
@@ -244,18 +241,16 @@ public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback
 
     private void submitMapData() {
 
-        progressDialog = new ProgressDialog(MhsLocation.this);
+        progressDialog = new ProgressDialog(SaveLocation.this);
         progressDialog.setMessage("Menyimpan Data");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
-
 
 
         try {
 
             JSONObject request = new JSONObject();
             Schedule schedule = new Schedule();
-
 
 
             request.put("id_jadwal_kelas", session.getIdJadwal());
@@ -265,9 +260,9 @@ public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback
             request.put("latitude", assetLocation.latitude);
             request.put("kelas", session.getIdKelas());
 
-            if (!session.getNipDosen().isEmpty()){
+            if (!session.getNipDosen().isEmpty()) {
                 request.put("nip", session.getNipDosen());
-            }else{
+            } else {
                 request.put("npm", session.getIdNpm());
             }
 
@@ -277,15 +272,14 @@ public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback
             Call<ResponseBody> res = null;
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), request.toString());
 
-            if (!session.getNipDosen().isEmpty()){
+            if (!session.getNipDosen().isEmpty()) {
                 res = mApiSevice.saveMapDosen(requestBody);
                 Log.d("save", "save dosen");
                 Log.d("savedosen", session.getNipDosen());
-            }else{
+            } else {
                 res = mApiSevice.saveMapMhs(requestBody);
                 Log.d("save", "save mhs");
             }
-
 
 
             res.enqueue(new Callback<ResponseBody>() {
@@ -293,32 +287,26 @@ public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     progressDialog.dismiss();
                     if (response.isSuccessful()) {
-                        Toast.makeText(MhsLocation.this, "Penyimpanan Lokasi Berhasil!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SaveLocation.this, "Penyimpanan Lokasi Berhasil!", Toast.LENGTH_LONG).show();
+                        if (!session.getNipDosen().isEmpty()) {
+                            startActivity(new Intent(SaveLocation.this, DosenMain.class));
 
-
-                        if (!session.getNipDosen().isEmpty()){
-                            startActivity(new Intent(MhsLocation.this, DosenMain.class));
-
-                        }else{
-                            startActivity(new Intent(MhsLocation.this, MhsMain.class));
+                        } else {
+                            startActivity(new Intent(SaveLocation.this, MhsMain.class));
 
                         }
-
-
-
-
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     progressDialog.dismiss();
-                    Toast.makeText(MhsLocation.this, "Penyimpanan Lokasi Gagal!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SaveLocation.this, "Penyimpanan Lokasi Gagal!", Toast.LENGTH_SHORT).show();
                 }
             });
 
 
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -410,6 +398,6 @@ public class MhsLocation extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        Toast.makeText(MhsLocation.this, "Anda tidak bisa merubah lokasi..", Toast.LENGTH_LONG).show();
+        Toast.makeText(SaveLocation.this, "Anda tidak bisa merubah lokasi..", Toast.LENGTH_LONG).show();
     }
 }

@@ -12,9 +12,9 @@
         android:title="Log Kehadiran" />
 
     <item
-        android:id="@+id/navigasi_informasi"
-        android:icon="@drawable/ic_library_music_black_24dp"
-        android:title="Informasi" />
+        android:id="@+id/navigasi_jadwal_log_dosen"
+        android:icon="@drawable/ic_library_books_black_24dp"
+        android:title="Log Dosen" />
 
     <item
         android:id="@+id/navigasi_logout"

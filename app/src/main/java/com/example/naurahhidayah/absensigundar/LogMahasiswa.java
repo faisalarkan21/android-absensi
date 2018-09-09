@@ -3,7 +3,6 @@ package com.example.naurahhidayah.absensigundar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -17,7 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.naurah.adapter.CustomListAdapterLogMhs;
+import com.naurah.adapter.AdapterLogInDosenMhs;
 import com.naurah.model.Mahasiswa;
 import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;
@@ -38,7 +37,7 @@ public class LogMahasiswa extends Activity {
     ProgressDialog progressDialog;
     private List<Mahasiswa> mhsList = new ArrayList<Mahasiswa>();
     private ListView listView;
-    private CustomListAdapterLogMhs adapter;
+    private AdapterLogInDosenMhs adapter;
     SessionManager session;
     boolean isHistoryMhs;
 
@@ -48,7 +47,7 @@ public class LogMahasiswa extends Activity {
         setContentView(R.layout.activity_mhs_log);
         Intent intent = getIntent();
         isHistoryMhs = intent.getBooleanExtra("isHistoryMhs", false);
-        adapter = new CustomListAdapterLogMhs(this, mhsList, isHistoryMhs);
+        adapter = new AdapterLogInDosenMhs(this, mhsList, isHistoryMhs);
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
 

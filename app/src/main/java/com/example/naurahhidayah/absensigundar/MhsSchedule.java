@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.naurah.adapter.CustomListAdapter;
+import com.naurah.adapter.AdapterToSaveLoc;
 import com.naurah.model.Schedule;
 import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;
@@ -39,7 +39,7 @@ public class MhsSchedule extends Activity {
     ProgressDialog progressDialog;
     private List<Schedule> scheduleList = new ArrayList<Schedule>();
     private ListView listView;
-    private CustomListAdapter adapter;
+    private AdapterToSaveLoc adapter;
     boolean isLogMhs;
 
 
@@ -50,8 +50,8 @@ public class MhsSchedule extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mhs_schedule);
         Intent intent = getIntent();
-        isLogMhs = intent.getBooleanExtra("isLogMhs", false);
-        adapter = new CustomListAdapter(this, scheduleList, isLogMhs);
+        isLogMhs = intent.getBooleanExtra("isDosenLogMhs", false);
+        adapter = new AdapterToSaveLoc(this, scheduleList, isLogMhs);
 
 
 

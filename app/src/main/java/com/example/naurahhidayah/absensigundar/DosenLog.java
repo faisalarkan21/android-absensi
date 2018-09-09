@@ -16,8 +16,9 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.naurah.adapter.AdapterLogInDosenMhs;
+import com.naurah.adapter.AdapterLogDosen;
 import com.naurah.model.Mahasiswa;
+import com.naurah.model.Schedule;
 import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;
 import com.naurah.utils.SessionManager;
@@ -28,16 +29,16 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-public class DosenLogMhs extends Activity {
+public class DosenLog extends Activity {
     // Log tag
     private static final String TAG = MainActivity2.class.getSimpleName();
     APIService mApiService;
     // Movies json url\
     //private static final String url = "https://api.androidhive.info/json/movies.json";
     ProgressDialog progressDialog;
-    private List<Mahasiswa> mhsList = new ArrayList<Mahasiswa>();
+    private List<Schedule> dsnList = new ArrayList<Schedule>();
     private ListView listView;
-    private AdapterLogInDosenMhs adapter;
+    private AdapterLogDosen adapter;
     SessionManager session;
     boolean isLogMhs;
 
@@ -47,7 +48,7 @@ public class DosenLogMhs extends Activity {
         setContentView(R.layout.activity_mhs_log);
         Intent intent = getIntent();
         isLogMhs = intent.getBooleanExtra("isDosenLogMhs", false);
-        adapter = new AdapterLogInDosenMhs(this, mhsList, isLogMhs);
+        adapter = new AdapterLogDosen(this, dsnList, isLogMhs);
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -63,28 +64,17 @@ public class DosenLogMhs extends Activity {
         rv.setAdapter(adapter);
 
         rv.setVisibility(View.VISIBLE);
-
-
         session = new SessionManager(getApplicationContext());
 
         String idKelas = intent.getStringExtra("kelas");
 
-        progressDialog = new ProgressDialog(DosenLogMhs.this);
+        progressDialog = new ProgressDialog(DosenLog.this);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("Sedang Menyiapkan Data");
         progressDialog.show();
-        // Showing progress dialog before making http request
-
-
 
         mApiService = ApiUtils.getAPIService();
-        Call<JsonObject> response = mApiService.getAllMahasiswa(idKelas, session.getIdJadwal());
-        // changing action bar color
-//        getActionBar().setBackgroundDrawable(
-//                new ColorDrawable(Color.parseColor("#1b1b1b")));
-
-        // Creating volley request obj
-
+        Call<JsonObject> response = mApiService.getAllLogDosen(idKelas, session.getIdJadwal(), session.getNipDosen() );
 
         response.enqueue(new Callback<JsonObject>() {
             @Override
@@ -95,22 +85,20 @@ public class DosenLogMhs extends Activity {
                         JsonArray jsonArray = rawResponse.body().get("data").getAsJsonArray();
 
                         if (jsonArray.size() == 0) {
-                            Toast.makeText(DosenLogMhs.this, "Tidak ada data.",
+                            Toast.makeText(DosenLog.this, "Tidak ada data.",
                                     Toast.LENGTH_LONG).show();
                         }
                         Log.d("TEST", jsonArray.toString());
                         for (int i = 0; i < jsonArray.size(); i++) {
 
-                            Mahasiswa mhs = new Mahasiswa();
+                            Schedule dsn = new Schedule();
                             JsonObject Data = jsonArray.get(i).getAsJsonObject();
                             Log.d("Data", jsonArray.toString());
-                            mhs.setNama(Data.get("nama").getAsString());
-                            mhs.setKelas(Data.get("kelas").getAsString());
-                            mhs.setNpm(Data.get("npm").getAsString());
-                            mhs.setTime(Data.get("date_on_sign") != null ? Data.get("date_on_sign").getAsString() : "Belum Input Lokasi");
-                            mhsList.add(mhs);
-
-
+                            dsn.setDosen(Data.get("nama").getAsString());
+                            dsn.setYear(Data.get("kelas").getAsString());
+                            dsn.setNip(Data.get("nip").getAsString());
+                            dsn.setPlaceAndTime(Data.get("date_on_sign") != null ? Data.get("date_on_sign").getAsString() : "Belum Input Lokasi");
+                            dsnList.add(dsn);
                         }
 
                         adapter.notifyDataSetChanged();
@@ -121,7 +109,7 @@ public class DosenLogMhs extends Activity {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(DosenLogMhs.this, rawResponse.toString(),
+                    Toast.makeText(DosenLog.this, rawResponse.toString(),
                             Toast.LENGTH_LONG).show();
                 }
 
@@ -130,7 +118,7 @@ public class DosenLogMhs extends Activity {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable throwable) {
-                Toast.makeText(DosenLogMhs.this, throwable.getMessage(),
+                Toast.makeText(DosenLog.this, throwable.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
         });

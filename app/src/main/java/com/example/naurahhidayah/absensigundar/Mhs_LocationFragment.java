@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
 public class Mhs_LocationFragment extends AppCompatActivity implements View.OnClickListener{
@@ -34,7 +32,7 @@ public class Mhs_LocationFragment extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_mhsloc:
-                Intent mhsloc = new Intent(this, MhsLocation.class);
+                Intent mhsloc = new Intent(this, SaveLocation.class);
                 mhsloc.putExtra("id_jadwal", idJadwal);
                 startActivity(mhsloc);
                 break;
