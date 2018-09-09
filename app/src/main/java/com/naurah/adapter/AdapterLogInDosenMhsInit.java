@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
-import com.example.naurahhidayah.absensigundar.DosenLog;
 import com.example.naurahhidayah.absensigundar.DosenLogMhs;
 import com.example.naurahhidayah.absensigundar.R;
 import com.naurah.model.Schedule;
@@ -62,7 +61,7 @@ public class AdapterLogInDosenMhsInit extends RecyclerView.Adapter<AdapterLogInD
                 @Override
                 public void onClick(View v) {
                     Log.d("inidia", Integer.toString(position));
-                    session.setIdJadwal(m.getIdJadwal());
+                    session.setIdJadwal(m.getIdMhs());
                     Intent i = new Intent(mContext, DosenLogMhs.class);
                     i.putExtra("kelas", m.getDosen());
                     mContext.startActivity(i);

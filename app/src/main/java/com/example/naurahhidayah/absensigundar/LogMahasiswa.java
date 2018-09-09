@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.naurah.adapter.AdapterLogInDosenMhs;
+import com.naurah.adapter.AdapterLogMhs;
 import com.naurah.model.Mahasiswa;
 import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;
@@ -37,7 +38,7 @@ public class LogMahasiswa extends Activity {
     ProgressDialog progressDialog;
     private List<Mahasiswa> mhsList = new ArrayList<Mahasiswa>();
     private ListView listView;
-    private AdapterLogInDosenMhs adapter;
+    private AdapterLogMhs adapter;
     SessionManager session;
     boolean isHistoryMhs;
 
@@ -47,7 +48,7 @@ public class LogMahasiswa extends Activity {
         setContentView(R.layout.activity_mhs_log);
         Intent intent = getIntent();
         isHistoryMhs = intent.getBooleanExtra("isHistoryMhs", false);
-        adapter = new AdapterLogInDosenMhs(this, mhsList, isHistoryMhs);
+        adapter = new AdapterLogMhs(this, mhsList, isHistoryMhs);
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -70,7 +71,7 @@ public class LogMahasiswa extends Activity {
 
         session = new SessionManager(getApplicationContext());
 
-        String idKelas = intent.getStringExtra("kelas");
+        String idJadwal = intent.getStringExtra("idJadwal");
 
         progressDialog = new ProgressDialog(LogMahasiswa.this);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -81,7 +82,8 @@ public class LogMahasiswa extends Activity {
 
 
         mApiService = ApiUtils.getAPIService();
-        Call<JsonObject> response = mApiService.getAllMahasiswa(idKelas, session.getIdJadwal());
+        Log.d("checkid", idJadwal);
+        Call<JsonObject> response = mApiService.getAllLogMhsByIdJadwal(idJadwal);
         // changing action bar color
 //        getActionBar().setBackgroundDrawable(
 //                new ColorDrawable(Color.parseColor("#1b1b1b")));
@@ -101,7 +103,7 @@ public class LogMahasiswa extends Activity {
                             Toast.makeText(LogMahasiswa.this, "Tidak ada data.",
                                     Toast.LENGTH_LONG).show();
                         }
-                        Log.d("TEST", jsonArray.toString());
+                        Log.d("TEST5", jsonArray.toString());
                         for (int i = 0; i < jsonArray.size(); i++) {
 
                             Mahasiswa mhs = new Mahasiswa();

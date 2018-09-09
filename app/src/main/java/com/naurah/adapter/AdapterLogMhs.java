@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.android.volley.toolbox.NetworkImageView;
 import com.example.naurahhidayah.absensigundar.R;
 import com.naurah.model.Mahasiswa;
-import com.naurah.model.Schedule;
 import com.naurah.service.APIService;
 import com.naurah.utils.SessionManager;
 
@@ -32,11 +31,11 @@ import retrofit2.Callback;
 
 //import com.example.naurahhidayah.absensigundar.Mhs_LocationFragment;
 
-public class AdapterLogDosen extends RecyclerView.Adapter<AdapterLogDosen.MyViewHolder> {
+public class AdapterLogMhs extends RecyclerView.Adapter<AdapterLogMhs.MyViewHolder> {
 
 
     private LayoutInflater inflater;
-    private List<Schedule> dsnItems;
+    private List<Mahasiswa> mhsItems;
     private Context mContext;
     SessionManager session;
     boolean isLogMhs;
@@ -44,9 +43,9 @@ public class AdapterLogDosen extends RecyclerView.Adapter<AdapterLogDosen.MyView
     APIService mApiService;
     private APIService ApiUtils;
 
-    public AdapterLogDosen(Activity activity, List<Schedule> mhsItems, Boolean isLogMhs) {
+    public AdapterLogMhs(Activity activity, List<Mahasiswa> mhsItems, Boolean isLogMhs) {
         this.mContext = activity;
-        this.dsnItems = mhsItems;
+        this.mhsItems = mhsItems;
         this.session = new SessionManager(activity.getApplication());
         this.isLogMhs = isLogMhs;
     }
@@ -62,19 +61,20 @@ public class AdapterLogDosen extends RecyclerView.Adapter<AdapterLogDosen.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        final Schedule m = dsnItems.get(position);
+        final Mahasiswa m = mhsItems.get(position);
 
-        holder.title.setText(m.getDosen());
-        holder.dosen.setText("NIP :" + m.getNip());
+        holder.title.setText(m.getNama());
+        holder.dosen.setText("NPM :" + m.getNpm());
 //        holder.genre.setText(m.getKelas());
-        holder.year.setText(m.getPlaceAndTime());
+        holder.year.setText(m.getTime());
 
     }
 
     @Override
     public int getItemCount() {
-        return dsnItems.size();
+        return mhsItems.size();
     }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title;

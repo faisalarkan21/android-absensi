@@ -1,54 +1,42 @@
 package com.naurah.adapter;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.ArrayMap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
+import com.example.naurahhidayah.absensigundar.LogMahasiswa;
 import com.example.naurahhidayah.absensigundar.R;
-import com.naurah.model.Mahasiswa;
 import com.naurah.model.Schedule;
-import com.naurah.service.APIService;
 import com.naurah.utils.SessionManager;
 
-import org.json.JSONObject;
-
 import java.util.List;
-import java.util.Map;
-
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
 
 //import com.example.naurahhidayah.absensigundar.Mhs_LocationFragment;
 
-public class AdapterLogDosen extends RecyclerView.Adapter<AdapterLogDosen.MyViewHolder> {
+public class AdapterLogMhsInit extends RecyclerView.Adapter<AdapterLogMhsInit.MyViewHolder> {
 
 
     private LayoutInflater inflater;
-    private List<Schedule> dsnItems;
+    private List<Schedule> scheduleItems;
     private Context mContext;
     SessionManager session;
     boolean isLogMhs;
-    ProgressDialog progressDialog;
-    APIService mApiService;
-    private APIService ApiUtils;
+    boolean isHistoryMhs;
 
-    public AdapterLogDosen(Activity activity, List<Schedule> mhsItems, Boolean isLogMhs) {
+    public AdapterLogMhsInit(Activity activity, List<Schedule> scheduleItems, Boolean isLogMhs) {
         this.mContext = activity;
-        this.dsnItems = mhsItems;
+        this.scheduleItems = scheduleItems;
         this.session = new SessionManager(activity.getApplication());
         this.isLogMhs = isLogMhs;
+        this.isHistoryMhs = isHistoryMhs;
     }
 
 
@@ -62,18 +50,28 @@ public class AdapterLogDosen extends RecyclerView.Adapter<AdapterLogDosen.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        final Schedule m = dsnItems.get(position);
+        final Schedule m = scheduleItems.get(position);
 
-        holder.title.setText(m.getDosen());
-        holder.dosen.setText("NIP :" + m.getNip());
-//        holder.genre.setText(m.getKelas());
-        holder.year.setText(m.getPlaceAndTime());
-
+        holder.title.setText(m.getTitle());
+        holder.dosen.setText(m.getDosen());
+        holder.genre.setText(m.getPlaceAndTime());
+        holder.year.setText(m.getYear());
+        Log.d("testlog", String.valueOf(isLogMhs));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("inidia", Integer.toString(position));
+                    session.setIdJadwal(m.getIdMhs());
+                    Intent i = new Intent(mContext, LogMahasiswa.class);
+                    i.putExtra("idJadwal", m.getIdJadwal());
+                    mContext.startActivity(i);
+                }
+            });
     }
 
     @Override
     public int getItemCount() {
-        return dsnItems.size();
+        return scheduleItems.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

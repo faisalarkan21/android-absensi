@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.example.naurahhidayah.absensigundar.DosenLog;
-import com.example.naurahhidayah.absensigundar.DosenLogMhs;
 import com.example.naurahhidayah.absensigundar.R;
 import com.naurah.model.Schedule;
 import com.naurah.utils.SessionManager;

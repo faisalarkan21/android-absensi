@@ -35,7 +35,7 @@ public class Mhs_JadwalFragmentLogMhs extends Fragment implements View.OnClickLi
         switch (v.getId()){
             case R.id.btn_mhsjadwal:
                 Intent mhsjadwal = new Intent(getActivity(), MhsSchedule.class);
-                mhsjadwal.putExtra("isHistoryMhs", true);
+                mhsjadwal.putExtra("isLogMhs", true);
                 startActivity(mhsjadwal);
                 break;
         }

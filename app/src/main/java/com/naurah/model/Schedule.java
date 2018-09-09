@@ -1,12 +1,11 @@
 package com.naurah.model;
 
-import java.util.ArrayList;
-
 public class Schedule {
     private String title, thumbnailUrl;
     private String year;
     private String dosen;
     private String placeAndTime;
+    private String idMhs;
     private String idJadwal;
     private String nip;
 
@@ -23,12 +22,12 @@ public class Schedule {
     }
 
 
-    public String getIdJadwal() {
-        return idJadwal;
+    public String getIdMhs() {
+        return idMhs;
     }
 
-    public void setIdJadwal(String idJadwal) {
-        this.idJadwal = idJadwal;
+    public void setIdMhs(String idMhs) {
+        this.idMhs = idMhs;
     }
 
     public String getTitle() {
@@ -79,5 +78,13 @@ public class Schedule {
 
     public void setNip(String nip) {
         this.nip = nip;
+    }
+
+    public String getIdJadwal() {
+        return idJadwal;
+    }
+
+    public void setIdJadwal(String idJadwal) {
+        this.idJadwal = idJadwal;
     }
 }

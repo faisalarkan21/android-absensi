@@ -44,6 +44,9 @@ public interface APIService {
     @GET("/api/get-all-log-mhs")
     Call<JsonObject> getAllLogMhsByNpm(@Query("npm") String npm);
 
+    @GET("/api/get-all-log-mhs")
+    Call<JsonObject> getAllLogMhsByIdJadwal(@Query("id_jadwal") String jadwal);
+
     @GET("/api/get-all-log-dsn")
     Call<JsonObject> getAllLogDosen(@Query("id_kelas") String id, @Query("id_jadwal") String jadwal, @Query("nip") String nip);
 

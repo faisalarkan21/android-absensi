@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.naurah.adapter.AdapterLogMhsInit;
 import com.naurah.adapter.AdapterToSaveLoc;
 import com.naurah.model.Schedule;
 import com.naurah.service.APIService;
@@ -39,10 +40,9 @@ public class MhsSchedule extends Activity {
     ProgressDialog progressDialog;
     private List<Schedule> scheduleList = new ArrayList<Schedule>();
     private ListView listView;
-    private AdapterToSaveLoc adapter;
+    private AdapterToSaveLoc adapterSaveLoc;
+    private AdapterLogMhsInit adapterLogMhsInit;
     boolean isLogMhs;
-
-
 
 
     @Override
@@ -50,49 +50,29 @@ public class MhsSchedule extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mhs_schedule);
         Intent intent = getIntent();
-        isLogMhs = intent.getBooleanExtra("isDosenLogMhs", false);
-        adapter = new AdapterToSaveLoc(this, scheduleList, isLogMhs);
-
-
-
-        RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
-
-        rv.setHasFixedSize(true);
-
-
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-
-        rv.setLayoutManager(mLayoutManager);
-
-        rv.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-
-        rv.setItemAnimator(new DefaultItemAnimator());
-        rv.setAdapter(adapter);
-
-        rv.setVisibility(View.VISIBLE);
-
-
-
-
+        isLogMhs = intent.getBooleanExtra("isLogMhs", false);
         session = new SessionManager(getApplicationContext());
 
+        if (isLogMhs) {
 
-        progressDialog = new ProgressDialog(MhsSchedule.this);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Sedang Menyiapkan Data");
-        progressDialog.show();
-        // Showing progress dialog before making http request
+            adapterLogMhsInit = new AdapterLogMhsInit(this, scheduleList, isLogMhs);
+            RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
+            rv.setHasFixedSize(true);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            rv.setLayoutManager(mLayoutManager);
+            rv.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+            rv.setItemAnimator(new DefaultItemAnimator());
+            rv.setAdapter(adapterLogMhsInit);
+            rv.setVisibility(View.VISIBLE);
+            session = new SessionManager(getApplicationContext());
 
-        if (isLogMhs){
+            progressDialog = new ProgressDialog(MhsSchedule.this);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Sedang Menyiapkan Data");
+            progressDialog.show();
+
             mApiService = ApiUtils.getAPIService();
-            Call<JsonObject> response = mApiService.getAllJadwalMhs(session.getIdKelas());
-            // changing action bar color
-//        getActionBar().setBackgroundDrawable(
-//                new ColorDrawable(Color.parseColor("#1b1b1b")));
-
-            // Creating volley request obj
-
-
+            Call<JsonObject> response = mApiService.getAllLogMhsByNpm(session.getIdNpm());
             response.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> rawResponse) {
@@ -107,14 +87,15 @@ public class MhsSchedule extends Activity {
                             }
                             Log.d("TEST", jsonArray.toString());
                             for (int i = 0; i < jsonArray.size(); i++) {
-//
-//
+
+
                                 Schedule schedule = new Schedule();
                                 JsonObject Data = jsonArray.get(i).getAsJsonObject();
                                 Log.d("Data", jsonArray.toString());
 
                                 schedule.setTitle(Data.get("matkul").getAsString());
-                                schedule.setIdJadwal(Data.get("id").getAsString());
+                                schedule.setIdMhs(Data.get("id").getAsString());
+                                schedule.setIdJadwal(Data.get("id_jadwal_kelas").getAsString());
 
 
                                 schedule.setDosen(Data.get("dosen").getAsString());
@@ -122,11 +103,11 @@ public class MhsSchedule extends Activity {
                                 schedule.setPlaceAndTime(Data.get("ruang").getAsString() + Data.get("waktu").getAsString());
 
                                 scheduleList.add(schedule);
-//
-//
+
+
                             }
 
-                            adapter.notifyDataSetChanged();
+                            adapterLogMhsInit.notifyDataSetChanged();
 
                             progressDialog.dismiss();
 
@@ -148,17 +129,29 @@ public class MhsSchedule extends Activity {
                 }
             });
 
-        }else{
+
+
+        } else {
+            adapterSaveLoc = new AdapterToSaveLoc(this, scheduleList, isLogMhs);
+            RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
+            rv.setHasFixedSize(true);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            rv.setLayoutManager(mLayoutManager);
+            rv.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+            rv.setItemAnimator(new DefaultItemAnimator());
+            rv.setAdapter(adapterSaveLoc);
+            rv.setVisibility(View.VISIBLE);
+            session = new SessionManager(getApplicationContext());
+
+            progressDialog = new ProgressDialog(MhsSchedule.this);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Sedang Menyiapkan Data");
+            progressDialog.show();
+            // Showing progress dialog before making http request
+
 
             mApiService = ApiUtils.getAPIService();
-            Call<JsonObject> response = mApiService.getAllLogMhsByNpm(session.getIdNpm());
-            // changing action bar color
-//        getActionBar().setBackgroundDrawable(
-//                new ColorDrawable(Color.parseColor("#1b1b1b")));
-
-            // Creating volley request obj
-
-
+            Call<JsonObject> response = mApiService.getAllJadwalMhs(session.getIdKelas());
             response.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> rawResponse) {
@@ -173,13 +166,15 @@ public class MhsSchedule extends Activity {
                             }
                             Log.d("TEST", jsonArray.toString());
                             for (int i = 0; i < jsonArray.size(); i++) {
-
-
+//
+//
                                 Schedule schedule = new Schedule();
                                 JsonObject Data = jsonArray.get(i).getAsJsonObject();
                                 Log.d("Data", jsonArray.toString());
 
                                 schedule.setTitle(Data.get("matkul").getAsString());
+
+                                // here id Jadwal kelas named id
                                 schedule.setIdJadwal(Data.get("id").getAsString());
 
 
@@ -188,11 +183,9 @@ public class MhsSchedule extends Activity {
                                 schedule.setPlaceAndTime(Data.get("ruang").getAsString() + Data.get("waktu").getAsString());
 
                                 scheduleList.add(schedule);
-
-
                             }
 
-                            adapter.notifyDataSetChanged();
+                            adapterSaveLoc.notifyDataSetChanged();
 
                             progressDialog.dismiss();
 
@@ -217,10 +210,6 @@ public class MhsSchedule extends Activity {
 
         }
 
-
-
-
-
     }
 
     @Override
@@ -235,7 +224,6 @@ public class MhsSchedule extends Activity {
         // getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 
 
 }
