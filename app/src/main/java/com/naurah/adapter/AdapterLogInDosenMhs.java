@@ -143,7 +143,7 @@ public class AdapterLogInDosenMhs extends RecyclerView.Adapter<AdapterLogInDosen
                                         if (rawResponse.isSuccessful()) {
                                             progressDialog.dismiss();
 
-                                            Toast.makeText(mContext, "Berhasil Mengapus",
+                                            Toast.makeText(mContext, "Berhasil Mengupdate Data",
                                                     Toast.LENGTH_LONG).show();
 
                                             ((Activity) mContext).finish();
@@ -189,7 +189,7 @@ public class AdapterLogInDosenMhs extends RecyclerView.Adapter<AdapterLogInDosen
                                         if (rawResponse.isSuccessful()) {
                                             progressDialog.dismiss();
 
-                                            Toast.makeText(mContext, "Berhasil Mengapus",
+                                            Toast.makeText(mContext, "Berhasil Mengupdate Data",
                                                     Toast.LENGTH_LONG).show();
 
                                             ((Activity) mContext).finish();
