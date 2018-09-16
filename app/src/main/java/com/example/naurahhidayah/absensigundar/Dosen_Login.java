@@ -119,7 +119,7 @@ public class Dosen_Login extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(Dosen_Login.this, "Password / Username Salah",
+                    Toast.makeText(Dosen_Login.this, rawResponse.message(),
                             Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
                 }

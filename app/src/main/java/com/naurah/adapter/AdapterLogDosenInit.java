@@ -55,7 +55,7 @@ public class AdapterLogDosenInit extends RecyclerView.Adapter<AdapterLogDosenIni
         final Schedule m = scheduleItems.get(position);
         Log.d("testlog", "coba");
         holder.title.setText(m.getTitle());
-        holder.dosen.setText(m.getDosen());
+//        holder.dosen.setText(m.getDosen());
         holder.genre.setText(m.getPlaceAndTime());
         holder.year.setText(m.getYear());
 

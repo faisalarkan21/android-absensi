@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_person_outline_black_24dp"
             android:drawablePadding="10dp"
-            android:text="yudi@yahoo.com"
+            android:text="kemal@yahoo.com"
             android:hint="USERNAME" />
 
         <EditText

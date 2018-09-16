@@ -3,37 +3,26 @@ package com.naurah.adapter;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.example.naurahhidayah.absensigundar.R;
-import com.naurah.model.Mahasiswa;
 import com.naurah.model.Schedule;
 import com.naurah.service.APIService;
 import com.naurah.utils.SessionManager;
 
-import org.json.JSONObject;
-
 import java.util.List;
-import java.util.Map;
 
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
+/**
+ * Created by faisal on 9/16/18.
+ */
 
-//import com.example.naurahhidayah.absensigundar.Mhs_LocationFragment;
-
-public class AdapterLogDosen extends RecyclerView.Adapter<AdapterLogDosen.MyViewHolder> {
-
+public class AdapterListPetemuanMhs  extends RecyclerView.Adapter<AdapterListPetemuanMhs.MyViewHolder>  {
 
     private LayoutInflater inflater;
     private List<Schedule> dsnItems;
@@ -44,7 +33,7 @@ public class AdapterLogDosen extends RecyclerView.Adapter<AdapterLogDosen.MyView
     APIService mApiService;
     private APIService ApiUtils;
 
-    public AdapterLogDosen(Activity activity, List<Schedule> mhsItems, Boolean isLogMhs) {
+    public AdapterListPetemuanMhs(Activity activity, List<Schedule> mhsItems, Boolean isLogMhs) {
         this.mContext = activity;
         this.dsnItems = mhsItems;
         this.session = new SessionManager(activity.getApplication());
@@ -54,20 +43,18 @@ public class AdapterLogDosen extends RecyclerView.Adapter<AdapterLogDosen.MyView
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterListPetemuanMhs.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_row, parent, false);
-        return new MyViewHolder(v);
+        return new AdapterListPetemuanMhs.MyViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull AdapterListPetemuanMhs.MyViewHolder holder, final int position) {
         final Schedule m = dsnItems.get(position);
 
-        holder.title.setText(m.getDosen());
-        holder.dosen.setText("Kelas : " + m.getYear());
-        holder.genre.setText("Pertemuan Ke : " + m.getPertemuan());
-        holder.year.setText(m.getPlaceAndTime());
+        holder.title.setText(m.getPertemuan());
+
 
     }
 
@@ -93,5 +80,6 @@ public class AdapterLogDosen extends RecyclerView.Adapter<AdapterLogDosen.MyView
             year = (TextView) view.findViewById(R.id.releaseYear);
         }
     }
+
 
 }

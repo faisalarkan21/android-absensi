@@ -8,6 +8,7 @@ public class Schedule {
     private String idMhs;
     private String idJadwal;
     private String nip;
+    private String pertemuan;
 
     public Schedule() {
     }
@@ -86,5 +87,13 @@ public class Schedule {
 
     public void setIdJadwal(String idJadwal) {
         this.idJadwal = idJadwal;
+    }
+
+    public String getPertemuan() {
+        return pertemuan;
+    }
+
+    public void setPertemuan(String pertemuan) {
+        this.pertemuan = pertemuan;
     }
 }

@@ -125,7 +125,7 @@ public class Mahasiswa_Login extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(Mahasiswa_Login.this, "Password / Username Salah",
+                    Toast.makeText(Mahasiswa_Login.this, rawResponse.message(),
                             Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
                 }

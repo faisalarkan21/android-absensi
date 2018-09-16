@@ -100,7 +100,7 @@ public class DosenSchedule extends Activity {
                                 schedule.setTitle(Data.get("matkul").getAsString());
                                 schedule.setDosen(Data.get("kelas").getAsString());
                                 schedule.setYear(Data.get("hari").getAsString());
-                                schedule.setPlaceAndTime(Data.get("ruang").getAsString() + " Jam Ke - " + Data.get("waktu").getAsString());
+                                    schedule.setPlaceAndTime(Data.get("ruang").getAsString() + " Jam Ke - " + Data.get("waktu").getAsString());
 
                                 scheduleList.add(schedule);
 

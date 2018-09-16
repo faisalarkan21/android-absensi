@@ -16,8 +16,8 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.naurah.adapter.AdapterListPetemuanMhs;
 import com.naurah.adapter.AdapterLogDosen;
-import com.naurah.model.Mahasiswa;
 import com.naurah.model.Schedule;
 import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;
@@ -29,8 +29,12 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-public class DosenLog extends Activity {
-    // Log tag
+/**
+ * Created by faisal on 9/16/18.
+ */
+
+public class DosenPertemuanMhs extends Activity {
+
     private static final String TAG = MainActivity2.class.getSimpleName();
     APIService mApiService;
     // Movies json url\
@@ -38,7 +42,7 @@ public class DosenLog extends Activity {
     ProgressDialog progressDialog;
     private List<Schedule> dsnList = new ArrayList<Schedule>();
     private ListView listView;
-    private AdapterLogDosen adapter;
+    private AdapterListPetemuanMhs adapter;
     SessionManager session;
     boolean isLogMhs;
 
@@ -48,7 +52,7 @@ public class DosenLog extends Activity {
         setContentView(R.layout.activity_mhs_log);
         Intent intent = getIntent();
         isLogMhs = intent.getBooleanExtra("isDosenLogMhs", false);
-        adapter = new AdapterLogDosen(this, dsnList, isLogMhs);
+        adapter = new AdapterListPetemuanMhs(this, dsnList, isLogMhs);
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -68,61 +72,22 @@ public class DosenLog extends Activity {
 
         String idKelas = intent.getStringExtra("kelas");
 
-        progressDialog = new ProgressDialog(DosenLog.this);
+        progressDialog = new ProgressDialog(DosenPertemuanMhs.this);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("Sedang Menyiapkan Data");
         progressDialog.show();
 
-        mApiService = ApiUtils.getAPIService();
-        Call<JsonObject> response = mApiService.getAllLogDosen(idKelas, session.getIdJadwal(), session.getNipDosen() );
+           for (int i = 0; i < 12; i++) {
 
-        response.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> rawResponse) {
+            Schedule dsn = new Schedule();
 
-                if (rawResponse.isSuccessful()) {
-                    try {
-                        JsonArray jsonArray = rawResponse.body().get("data").getAsJsonArray();
+            dsn.setPertemuan("Petemuan Ke : " + (i +1));
 
-                        if (jsonArray.size() == 0) {
-                            Toast.makeText(DosenLog.this, "Tidak ada data.",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                        Log.d("TEST", jsonArray.toString());
-                        for (int i = 0; i < jsonArray.size(); i++) {
+            dsnList.add(dsn);
+        }
 
-                            Schedule dsn = new Schedule();
-                            JsonObject Data = jsonArray.get(i).getAsJsonObject();
-                            Log.d("Data", jsonArray.toString());
-                            dsn.setDosen(Data.get("nama").getAsString());
-                            dsn.setYear(Data.get("kelas").getAsString());
-                            dsn.setPertemuan(Data.get("pertemuan").getAsString());
-                            dsn.setNip(Data.get("nip").getAsString());
-                            dsn.setPlaceAndTime(Data.get("date_on_sign") != null ? Data.get("date_on_sign").getAsString() : "Belum Input Lokasi");
-                            dsnList.add(dsn);
-                        }
-
-                        adapter.notifyDataSetChanged();
-
-                        progressDialog.dismiss();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Toast.makeText(DosenLog.this, rawResponse.toString(),
-                            Toast.LENGTH_LONG).show();
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable throwable) {
-                Toast.makeText(DosenLog.this, throwable.getMessage(),
-                        Toast.LENGTH_LONG).show();
-            }
-        });
+        adapter.notifyDataSetChanged();
+        progressDialog.dismiss();
 
 
     }
@@ -139,7 +104,6 @@ public class DosenLog extends Activity {
         // getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 
 
 }
