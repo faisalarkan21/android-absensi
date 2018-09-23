@@ -16,9 +16,9 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.naurah.adapter.AdapterLogDosen;
+import com.naurah.adapter.AdapterLogInDosenMhs;
+import com.naurah.adapter.AdapterLogInListPertemuanDosenMhs;
 import com.naurah.model.Mahasiswa;
-import com.naurah.model.Schedule;
 import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;
 import com.naurah.utils.SessionManager;
@@ -29,18 +29,17 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-public class DosenLog extends Activity {
+public class DosenLogMhsPertemuan extends Activity {
     // Log tag
     private static final String TAG = MainActivity2.class.getSimpleName();
     APIService mApiService;
     // Movies json url\
     //private static final String url = "https://api.androidhive.info/json/movies.json";
     ProgressDialog progressDialog;
-    private List<Schedule> dsnList = new ArrayList<Schedule>();
+    private List<Mahasiswa> mhsList = new ArrayList<Mahasiswa>();
     private ListView listView;
-    private AdapterLogDosen adapter;
+    private AdapterLogInListPertemuanDosenMhs adapter;
     SessionManager session;
-    boolean isLogMhs;
     String idPertemuan;
 
     @Override
@@ -48,9 +47,9 @@ public class DosenLog extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mhs_log);
         Intent intent = getIntent();
-        isLogMhs = intent.getBooleanExtra("isDosenLogMhs", false);
-        adapter = new AdapterLogDosen(this, dsnList, isLogMhs);
         idPertemuan = intent.getStringExtra("pertemuan");
+        adapter = new AdapterLogInListPertemuanDosenMhs(this, mhsList);
+
         RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
 
         rv.setHasFixedSize(true);
@@ -65,17 +64,28 @@ public class DosenLog extends Activity {
         rv.setAdapter(adapter);
 
         rv.setVisibility(View.VISIBLE);
+
+
         session = new SessionManager(getApplicationContext());
 
-        String idKelas = intent.getStringExtra("kelas");
+//        String idKelas = intent.getStringExtra("kelas");
 
-        progressDialog = new ProgressDialog(DosenLog.this);
+        progressDialog = new ProgressDialog(DosenLogMhsPertemuan.this);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("Sedang Menyiapkan Data");
         progressDialog.show();
+        // Showing progress dialog before making http request
+
+
 
         mApiService = ApiUtils.getAPIService();
-        Call<JsonObject> response = mApiService.getAllLogPertemuanDosen(session.getIdJadwal(), idPertemuan );
+        Call<JsonObject> response = mApiService.getAllLogMhsPertemuanDosen(session.getIdJadwal(), idPertemuan);
+        // changing action bar color
+//        getActionBar().setBackgroundDrawable(
+//                new ColorDrawable(Color.parseColor("#1b1b1b")));
+
+        // Creating volley request obj
+
 
         response.enqueue(new Callback<JsonObject>() {
             @Override
@@ -83,35 +93,49 @@ public class DosenLog extends Activity {
 
                 if (rawResponse.isSuccessful()) {
                     try {
-                        JsonArray jsonArray = rawResponse.body().get("data").getAsJsonObject().get("logDsn").getAsJsonArray();
+                        JsonArray jsonArray = rawResponse.body().get("data").getAsJsonObject().get("logMhs").getAsJsonArray();
 
                         if (jsonArray.size() == 0) {
-                            Toast.makeText(DosenLog.this, "Tidak ada data.",
+                            Toast.makeText(DosenLogMhsPertemuan.this, "Tidak ada data.",
                                     Toast.LENGTH_LONG).show();
                         }
-                        Log.d("TEST", jsonArray.toString());
+                        Log.d("TEST", rawResponse.body().get("data").toString());
                         for (int i = 0; i < jsonArray.size(); i++) {
 
-                            Schedule dsn = new Schedule();
+                            Mahasiswa mhs = new Mahasiswa();
                             JsonObject Data = jsonArray.get(i).getAsJsonObject();
-                            Log.d("Data", jsonArray.toString());
-                            dsn.setIdLog(Data.get("id_log_dsn").getAsString());
-                            dsn.setDosen(Data.get("nama").getAsString());
-                            dsn.setYear(Data.get("kelas").getAsString());
-//                            dsn.setPertemuan(Data.get("pertemuan").getAsString());
-                            dsn.setNip(Data.get("nip").getAsString());
-                            if(Data.get("date_on_sign").isJsonNull()){
-                                dsn.setTime("Belum Input Lokasi");
+                            Log.d("Data",rawResponse.body().get("data").toString());
+
+                            if(Data.get("id_log_mhs").isJsonNull()){
+                                mhs.setIdLog(null);
                             }else {
-                                dsn.setTime(Data.get("date_on_sign") != null ? Data.get("date_on_sign").getAsString() : "Belum Input Lokasi");
+                                mhs.setIdLog(Data.get("id_log_mhs").getAsString());
+                            }
+
+
+
+                            mhs.setNama(Data.get("nama").getAsString());
+                            mhs.setKelas(Data.get("kelas").getAsString());
+                            mhs.setNpm(Data.get("npm").getAsString());
+
+                            if(Data.get("date_on_sign").isJsonNull()){
+                                mhs.setTime("Belum Input Lokasi");
+                            }else {
+                                mhs.setTime(Data.get("date_on_sign") != null ? Data.get("date_on_sign").getAsString() : "Belum Input Lokasi");
                             }
 
                             if(Data.get("isValid").isJsonNull()){
-                                dsn.setVerified(null);
+                                mhs.setVerified(null);
                             }else {
-                                dsn.setVerified(Data.get("isValid").getAsInt() == 1 ?  true : false);
+                                mhs.setVerified(Data.get("isValid").getAsInt() == 1 ?  true : false);
                             }
-                            dsnList.add(dsn);
+
+                            
+
+
+                            mhsList.add(mhs);
+
+
                         }
 
                         adapter.notifyDataSetChanged();
@@ -122,7 +146,7 @@ public class DosenLog extends Activity {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(DosenLog.this, rawResponse.toString(),
+                    Toast.makeText(DosenLogMhsPertemuan.this, rawResponse.toString(),
                             Toast.LENGTH_LONG).show();
                 }
 
@@ -131,7 +155,7 @@ public class DosenLog extends Activity {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable throwable) {
-                Toast.makeText(DosenLog.this, throwable.getMessage(),
+                Toast.makeText(DosenLogMhsPertemuan.this, throwable.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
         });

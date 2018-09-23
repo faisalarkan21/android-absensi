@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ListView;
 
+import com.naurah.adapter.AdapterListPetemuanDosenInit;
 import com.naurah.adapter.AdapterListPetemuanDosenMhsInit;
 import com.naurah.model.Schedule;
 import com.naurah.service.APIService;
@@ -21,10 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by faisal on 9/16/18.
+ * Created by faisal on 9/23/18.
  */
 
-public class DosenPertemuanMhs extends Activity {
+public class DosenPertemuanDosen extends Activity {
 
     private static final String TAG = MainActivity2.class.getSimpleName();
     APIService mApiService;
@@ -33,7 +34,7 @@ public class DosenPertemuanMhs extends Activity {
     ProgressDialog progressDialog;
     private List<Schedule> dsnList = new ArrayList<Schedule>();
     private ListView listView;
-    private AdapterListPetemuanDosenMhsInit adapter;
+    private AdapterListPetemuanDosenInit adapter;
     SessionManager session;
     boolean isLogMhs;
 
@@ -43,7 +44,7 @@ public class DosenPertemuanMhs extends Activity {
         setContentView(R.layout.activity_mhs_log);
         Intent intent = getIntent();
         isLogMhs = intent.getBooleanExtra("isDosenLogMhs", false);
-        adapter = new AdapterListPetemuanDosenMhsInit(this, dsnList, isLogMhs);
+        adapter = new AdapterListPetemuanDosenInit(this, dsnList, isLogMhs);
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -63,12 +64,12 @@ public class DosenPertemuanMhs extends Activity {
 
         String idKelas = intent.getStringExtra("kelas");
 
-        progressDialog = new ProgressDialog(DosenPertemuanMhs.this);
+        progressDialog = new ProgressDialog(DosenPertemuanDosen.this);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("Sedang Menyiapkan Data");
         progressDialog.show();
 
-           for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 12; i++) {
 
             Schedule dsn = new Schedule();
 

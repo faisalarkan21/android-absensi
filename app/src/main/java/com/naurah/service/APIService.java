@@ -33,13 +33,13 @@ public interface APIService {
                                     @Query("key") String key);
 
     @GET("/api/jadwal-mhs")
-    Call<JsonObject> getAllJadwalMhs(@Query("kelas") String params);
+    Call<JsonObject> getAllJadwalMhs(@Query("kelas") String params, @Query("npm") String npm);
 
     @GET("/api/get-all-mhs")
     Call<JsonObject> getAllMahasiswa(@Query("id_kelas") String params, @Query("id_jadwal") String idJadwalKelas);
 
     @GET("/api/jadwal-dosen")
-    Call<JsonObject> getAllJadwalDosen(@Query("id") String idDosen);
+    Call<JsonObject> getAllJadwalDosen(@Query("id") String idDosen, @Query("nip") String nip);
 
     @GET("/api/get-all-log-mhs")
     Call<JsonObject> getAllLogMhsByNpm(@Query("npm") String npm);
@@ -49,6 +49,16 @@ public interface APIService {
 
     @GET("/api/get-all-log-dsn")
     Call<JsonObject> getAllLogDosen(@Query("id_kelas") String id, @Query("id_jadwal") String jadwal, @Query("nip") String nip);
+
+    @GET("/api/get-log-mobile")
+    Call<JsonObject> getAllLogMhsPertemuanDosen(@Query("id_jadwal") String jadwal, @Query("idPert") String idPert);
+
+    @GET("/api/get-log-mobile-mahasiswa")
+    Call<JsonObject> getAllLogMhsPertemuan(@Query("id_jadwal") String jadwal, @Query("idPert") String idPert,  @Query("npm") String npm);
+
+    @GET("/api/get-log-mobile-dosen")
+    Call<JsonObject> getAllLogPertemuanDosen(@Query("id_jadwal") String jadwal, @Query("idPert") String idPert);
+
 
     @POST("/api/update-mhs-log-validation")
     Call<ResponseBody> updateLogMgsIsValid(@Body RequestBody idLog);

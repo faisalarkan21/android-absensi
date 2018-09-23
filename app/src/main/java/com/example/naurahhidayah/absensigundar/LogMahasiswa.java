@@ -41,6 +41,7 @@ public class LogMahasiswa extends Activity {
     private AdapterLogMhs adapter;
     SessionManager session;
     boolean isHistoryMhs;
+    String idPertemuan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class LogMahasiswa extends Activity {
         setContentView(R.layout.activity_mhs_log);
         Intent intent = getIntent();
         isHistoryMhs = intent.getBooleanExtra("isHistoryMhs", false);
+        idPertemuan = intent.getStringExtra("pertemuan");
         adapter = new AdapterLogMhs(this, mhsList, isHistoryMhs);
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
@@ -82,8 +84,8 @@ public class LogMahasiswa extends Activity {
 
 
         mApiService = ApiUtils.getAPIService();
-        Log.d("checkid", idJadwal);
-        Call<JsonObject> response = mApiService.getAllLogMhsByIdJadwal(idJadwal);
+//        Log.d("checkid", idJadwal);
+        Call<JsonObject> response = mApiService.getAllLogMhsPertemuan(session.getIdJadwal(), idPertemuan, session.getIdNpm());
         // changing action bar color
 //        getActionBar().setBackgroundDrawable(
 //                new ColorDrawable(Color.parseColor("#1b1b1b")));
@@ -97,7 +99,7 @@ public class LogMahasiswa extends Activity {
 
                 if (rawResponse.isSuccessful()) {
                     try {
-                        JsonArray jsonArray = rawResponse.body().get("data").getAsJsonArray();
+                        JsonArray jsonArray = rawResponse.body().get("data").getAsJsonObject().get("logMhs").getAsJsonArray();
 
                         if (jsonArray.size() == 0) {
                             Toast.makeText(LogMahasiswa.this, "Tidak ada data.",
@@ -109,10 +111,22 @@ public class LogMahasiswa extends Activity {
                             Mahasiswa mhs = new Mahasiswa();
                             JsonObject Data = jsonArray.get(i).getAsJsonObject();
                             Log.d("Data", jsonArray.toString());
+                            mhs.setIdLog(Data.get("id_log_mhs").getAsString());
                             mhs.setNama(Data.get("nama").getAsString());
                             mhs.setKelas(Data.get("kelas").getAsString());
                             mhs.setNpm(Data.get("npm").getAsString());
-                            mhs.setTime(Data.get("date_on_sign") != null ? Data.get("date_on_sign").getAsString() : "Belum Input Lokasi");
+
+                            if(Data.get("date_on_sign").isJsonNull()){
+                                mhs.setTime("Belum Input Lokasi");
+                            }else {
+                                mhs.setTime(Data.get("date_on_sign") != null ? Data.get("date_on_sign").getAsString() : "Belum Input Lokasi");
+                            }
+
+                            if(Data.get("isValid").isJsonNull()){
+                                mhs.setVerified(null);
+                            }else {
+                                mhs.setVerified(Data.get("isValid").getAsInt() == 1 ?  true : false);
+                            }
                             mhsList.add(mhs);
 
 

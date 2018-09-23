@@ -72,7 +72,7 @@ public class MhsSchedule extends Activity {
             progressDialog.show();
 
             mApiService = ApiUtils.getAPIService();
-            Call<JsonObject> response = mApiService.getAllLogMhsByNpm(session.getIdNpm());
+            Call<JsonObject> response = mApiService.getAllJadwalMhs(session.getIdKelas(), session.getIdNpm());
             response.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> rawResponse) {
@@ -94,11 +94,11 @@ public class MhsSchedule extends Activity {
                                 Log.d("Data", jsonArray.toString());
 
                                 schedule.setTitle(Data.get("matkul").getAsString());
-                                schedule.setIdMhs(Data.get("id").getAsString());
-                                schedule.setIdJadwal(Data.get("id_jadwal_kelas").getAsString());
+//                                schedule.setIdMhs(Data.get("id").getAsString());
+                                schedule.setIdJadwal(Data.get("id").getAsString());
 
 
-                                schedule.setDosen(Data.get("dosen").getAsString());
+                                schedule.setDosen(Data.get("nama_dosen").getAsString());
                                 schedule.setYear(Data.get("hari").getAsString());
                                 schedule.setPlaceAndTime(Data.get("ruang").getAsString() + Data.get("waktu").getAsString());
 
@@ -151,7 +151,7 @@ public class MhsSchedule extends Activity {
 
 
             mApiService = ApiUtils.getAPIService();
-            Call<JsonObject> response = mApiService.getAllJadwalMhs(session.getIdKelas());
+            Call<JsonObject> response = mApiService.getAllJadwalMhs(session.getIdKelas(), session.getIdNpm());
             response.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> rawResponse) {
@@ -175,10 +175,11 @@ public class MhsSchedule extends Activity {
                                 schedule.setTitle(Data.get("matkul").getAsString());
 
                                 // here id Jadwal kelas named id
-                                schedule.setIdJadwal(Data.get("id").getAsString());
+                                schedule.setIdJadwal(Data.get("id_jadwal").getAsString());
 
-
-                                schedule.setDosen(Data.get("dosen").getAsString());
+                                schedule.setPertemuanDosen(Data.get("pertemuanDosen").getAsString());
+                                schedule.setPertemuanMhs(Data.get("pertemuanMhs").getAsString());
+                                schedule.setDosen(Data.get("nama").getAsString());
                                 schedule.setYear(Data.get("hari").getAsString());
                                 schedule.setPlaceAndTime(Data.get("ruang").getAsString() + Data.get("waktu").getAsString());
 

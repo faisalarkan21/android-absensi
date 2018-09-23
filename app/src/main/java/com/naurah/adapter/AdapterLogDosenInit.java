@@ -13,6 +13,9 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.example.naurahhidayah.absensigundar.DosenLog;
+import com.example.naurahhidayah.absensigundar.DosenLogMhsPertemuan;
+import com.example.naurahhidayah.absensigundar.DosenPertemuanDosen;
+import com.example.naurahhidayah.absensigundar.DosenPertemuanMhs;
 import com.example.naurahhidayah.absensigundar.R;
 import com.naurah.model.Schedule;
 import com.naurah.utils.SessionManager;
@@ -62,10 +65,10 @@ public class AdapterLogDosenInit extends RecyclerView.Adapter<AdapterLogDosenIni
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("inidia", Integer.toString(position));
+//                Log.d("inidia", Integer.toString(position));
                 session.setIdJadwal(m.getIdJadwal());
-                Intent i = new Intent(mContext, DosenLog.class);
-                i.putExtra("kelas", m.getDosen());
+                Intent i = new Intent(mContext, DosenPertemuanDosen.class);
+//                i.putExtra("kelas", m.getDosen());
                 mContext.startActivity(i);
             }
         });

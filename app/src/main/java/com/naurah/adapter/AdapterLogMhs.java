@@ -65,7 +65,19 @@ public class AdapterLogMhs extends RecyclerView.Adapter<AdapterLogMhs.MyViewHold
 
         holder.title.setText(m.getNama());
         holder.dosen.setText("NPM :" + m.getNpm());
-//        holder.genre.setText(m.getKelas());
+        holder.genre.setText(m.getKelas());
+
+        if (m.getTime().equals("Belum Input Lokasi")) {
+            holder.genre.setText("");
+        }else if (m.getIdLog() == null  || m.getVerified() == null) {
+
+            holder.genre.setText("Belum Terverifikasi");
+        } else if (m.getIdLog() == null  || !m.getVerified() ) {
+            holder.genre.setText("Anda Tidak Datang");
+        } else {
+            holder.genre.setText("Anda Sudah Terverifikasi");
+        }
+
         holder.year.setText(m.getTime());
 
     }

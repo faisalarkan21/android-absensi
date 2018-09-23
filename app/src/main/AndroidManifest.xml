@@ -53,6 +53,9 @@
         <activity android:name=".DosenLog" />
         <activity android:name=".DosenPertemuanMhs" />
         <activity android:name=".Mhs_JadwalFragmentLogMhs"></activity>
+        <activity android:name=".DosenLogMhsPertemuan"></activity>
+        <activity android:name=".DosenPertemuanDosen"></activity>
+        <activity android:name=".MahasiswaPertemuanMhs"></activity>
     </application>
 
 </manifest>

@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 import com.naurah.adapter.AdapterLogDosenInit;
 import com.naurah.adapter.AdapterLogInDosenMhsInit;
 import com.naurah.adapter.AdapterToSaveLoc;
+import com.naurah.adapter.AdapterToSaveLocDosen;
 import com.naurah.model.Schedule;
 import com.naurah.service.APIService;
 import com.naurah.utils.ApiUtils;
@@ -41,7 +42,7 @@ public class DosenSchedule extends Activity {
     private ListView listView;
     private AdapterLogInDosenMhsInit adapterLogMhsInit;
     private AdapterLogDosenInit adapterLogDosenInit;
-    private AdapterToSaveLoc adapterLoc;
+    private AdapterToSaveLocDosen adapterLoc;
     SessionManager session;
     boolean isDosenLogMhs;
     boolean isLogDosen;
@@ -75,7 +76,7 @@ public class DosenSchedule extends Activity {
 
 
             mApiService = ApiUtils.getAPIService();
-            Call<JsonObject> response = mApiService.getAllJadwalDosen(session.getIdDosen());
+            Call<JsonObject> response = mApiService.getAllJadwalDosen(session.getIdDosen(), session.getNipDosen());
 
             response.enqueue(new Callback<JsonObject>() {
                 @Override
@@ -151,7 +152,7 @@ public class DosenSchedule extends Activity {
 
 
             mApiService = ApiUtils.getAPIService();
-            Call<JsonObject> response = mApiService.getAllJadwalDosen(session.getIdDosen());
+            Call<JsonObject> response = mApiService.getAllJadwalDosen(session.getIdDosen(), session.getNipDosen());
             response.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> rawResponse) {
@@ -205,7 +206,7 @@ public class DosenSchedule extends Activity {
 
         } else {
 
-            adapterLoc = new AdapterToSaveLoc(this, scheduleList, isDosenLogMhs);
+            adapterLoc = new AdapterToSaveLocDosen(this, scheduleList, isDosenLogMhs);
 
             RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -235,7 +236,7 @@ public class DosenSchedule extends Activity {
 
 
             mApiService = ApiUtils.getAPIService();
-            Call<JsonObject> response = mApiService.getAllJadwalDosen(session.getIdDosen());
+            Call<JsonObject> response = mApiService.getAllJadwalDosen(session.getIdDosen(), session.getNipDosen());
             response.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> rawResponse) {
@@ -257,8 +258,9 @@ public class DosenSchedule extends Activity {
                                 schedule.setIdJadwal(Data.get("id_jadwal").getAsString());
                                 schedule.setNip(Data.get("nip").getAsString());
                                 schedule.setTitle(Data.get("matkul").getAsString());
-                                schedule.setDosen(Data.get("kelas").getAsString());
+                                schedule.setDosen(Data.get("nama_kelas").getAsString());
                                 schedule.setYear(Data.get("hari").getAsString());
+                                schedule.setPertemuanDosen(Data.get("pertemuanDosen").getAsString());
                                 schedule.setPlaceAndTime(Data.get("ruang").getAsString() + " Jam Ke - " + Data.get("waktu").getAsString());
 
                                 scheduleList.add(schedule);

@@ -10,12 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
-import com.example.naurahhidayah.absensigundar.DosenLogMhs;
-import com.example.naurahhidayah.absensigundar.DosenPertemuanMhs;
 import com.example.naurahhidayah.absensigundar.R;
-import com.naurah.model.Mahasiswa;
+import com.example.naurahhidayah.absensigundar.SaveLocation;
 import com.naurah.model.Schedule;
 import com.naurah.utils.SessionManager;
 
@@ -23,7 +22,7 @@ import java.util.List;
 
 //import com.example.naurahhidayah.absensigundar.Mhs_LocationFragment;
 
-public class AdapterLogInDosenMhsInit extends RecyclerView.Adapter<AdapterLogInDosenMhsInit.MyViewHolder> {
+public class AdapterToSaveLocDosen extends RecyclerView.Adapter<AdapterToSaveLocDosen.MyViewHolder> {
 
 
     private LayoutInflater inflater;
@@ -33,7 +32,7 @@ public class AdapterLogInDosenMhsInit extends RecyclerView.Adapter<AdapterLogInD
     boolean isLogMhs;
     boolean isHistoryMhs;
 
-    public AdapterLogInDosenMhsInit(Activity activity, List<Schedule> scheduleItems, Boolean isLogMhs) {
+    public AdapterToSaveLocDosen(Activity activity, List<Schedule> scheduleItems, Boolean isLogMhs) {
         this.mContext = activity;
         this.scheduleItems = scheduleItems;
         this.session = new SessionManager(activity.getApplication());
@@ -53,22 +52,23 @@ public class AdapterLogInDosenMhsInit extends RecyclerView.Adapter<AdapterLogInD
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         final Schedule m = scheduleItems.get(position);
-
+        int pertemuanMhs = 0;
         holder.title.setText(m.getTitle());
         holder.dosen.setText(m.getDosen());
-        holder.genre.setText(m.getPlaceAndTime());
         holder.year.setText(m.getYear());
+        int pertemuanDosen = Integer.parseInt(m.getPertemuanDosen());
+
+        if (pertemuanDosen == 0) {
+            holder.genre.setText(m.getPlaceAndTime() + "- Belum Ada Pertemuan");
+
+        } else if (pertemuanDosen > pertemuanMhs) {
+            holder.genre.setText(m.getPlaceAndTime() + "- Pertemuan Ke - " + (pertemuanDosen));
+        }
+
         Log.d("testlog", String.valueOf(isLogMhs));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    Log.d("inidia", Integer.toString(position));
-                    session.setIdJadwal(m.getIdJadwal());
-                    Intent i = new Intent(mContext, DosenPertemuanMhs.class);
-//                    i.putExtra("kelas", m.getDosen());
-                    mContext.startActivity(i);
-                }
-            });
+
+        // buat absen dosen,....
+
     }
 
     @Override
@@ -92,10 +92,29 @@ public class AdapterLogInDosenMhsInit extends RecyclerView.Adapter<AdapterLogInD
             genre = (TextView) view.findViewById(R.id.genre);
             year = (TextView) view.findViewById(R.id.releaseYear);
 
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    int position = getAdapterPosition();
+                    final Schedule m = scheduleItems.get(position);
 
 
 
 
+
+
+
+
+                        Log.d("inidia", Integer.toString(position));
+                        session.setIdJadwal(m.getIdJadwal());
+                        Intent i = new Intent(mContext, SaveLocation.class);
+                        mContext.startActivity(i);
+
+
+
+                }
+            });
         }
     }
 

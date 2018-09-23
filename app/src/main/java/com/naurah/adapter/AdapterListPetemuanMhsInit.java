@@ -1,6 +1,7 @@
 package com.naurah.adapter;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -12,68 +13,62 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
-import com.example.naurahhidayah.absensigundar.DosenLogMhs;
-import com.example.naurahhidayah.absensigundar.DosenPertemuanMhs;
+import com.example.naurahhidayah.absensigundar.DosenLog;
+import com.example.naurahhidayah.absensigundar.LogMahasiswa;
 import com.example.naurahhidayah.absensigundar.R;
-import com.naurah.model.Mahasiswa;
 import com.naurah.model.Schedule;
+import com.naurah.service.APIService;
 import com.naurah.utils.SessionManager;
 
 import java.util.List;
 
-//import com.example.naurahhidayah.absensigundar.Mhs_LocationFragment;
+/**
+ * Created by faisal on 9/16/18.
+ */
 
-public class AdapterLogInDosenMhsInit extends RecyclerView.Adapter<AdapterLogInDosenMhsInit.MyViewHolder> {
-
+public class AdapterListPetemuanMhsInit extends RecyclerView.Adapter<AdapterListPetemuanMhsInit.MyViewHolder>  {
 
     private LayoutInflater inflater;
-    private List<Schedule> scheduleItems;
+    private List<Schedule> dsnItems;
     private Context mContext;
     SessionManager session;
     boolean isLogMhs;
-    boolean isHistoryMhs;
+    ProgressDialog progressDialog;
+    APIService mApiService;
+    private APIService ApiUtils;
 
-    public AdapterLogInDosenMhsInit(Activity activity, List<Schedule> scheduleItems, Boolean isLogMhs) {
+    public AdapterListPetemuanMhsInit(Activity activity, List<Schedule> mhsItems, Boolean isLogMhs) {
         this.mContext = activity;
-        this.scheduleItems = scheduleItems;
+        this.dsnItems = mhsItems;
         this.session = new SessionManager(activity.getApplication());
         this.isLogMhs = isLogMhs;
-        this.isHistoryMhs = isHistoryMhs;
     }
 
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterListPetemuanMhsInit.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_row, parent, false);
-        return new MyViewHolder(v);
+        return new AdapterListPetemuanMhsInit.MyViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        final Schedule m = scheduleItems.get(position);
+    public void onBindViewHolder(@NonNull AdapterListPetemuanMhsInit.MyViewHolder holder, final int position) {
+        final Schedule m = dsnItems.get(position);
 
-        holder.title.setText(m.getTitle());
-        holder.dosen.setText(m.getDosen());
-        holder.genre.setText(m.getPlaceAndTime());
-        holder.year.setText(m.getYear());
-        Log.d("testlog", String.valueOf(isLogMhs));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    Log.d("inidia", Integer.toString(position));
-                    session.setIdJadwal(m.getIdJadwal());
-                    Intent i = new Intent(mContext, DosenPertemuanMhs.class);
-//                    i.putExtra("kelas", m.getDosen());
-                    mContext.startActivity(i);
-                }
-            });
+        holder.title.setText(m.getPertemuan());
+
+                    Log.d("inidia", Integer.toString(position));
+
+
+
+
     }
 
     @Override
     public int getItemCount() {
-        return scheduleItems.size();
+        return dsnItems.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -93,10 +88,26 @@ public class AdapterLogInDosenMhsInit extends RecyclerView.Adapter<AdapterLogInD
             year = (TextView) view.findViewById(R.id.releaseYear);
 
 
+            view.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+
+                    Intent i = new Intent(mContext, LogMahasiswa.class);
+                    i.putExtra("pertemuan", String.valueOf(position));
+                    mContext.startActivity(i);
+
+
+
+                }
+            });
+
 
 
 
         }
     }
+
 
 }

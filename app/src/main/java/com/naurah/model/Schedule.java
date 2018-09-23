@@ -9,6 +9,11 @@ public class Schedule {
     private String idJadwal;
     private String nip;
     private String pertemuan;
+    private String pertemuanDosen;
+    private String pertemuanMhs;
+    private String time;
+    private Boolean isVerified;
+    private String idLog;
 
     public Schedule() {
     }
@@ -95,5 +100,45 @@ public class Schedule {
 
     public void setPertemuan(String pertemuan) {
         this.pertemuan = pertemuan;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
+    }
+
+    public String getIdLog() {
+        return idLog;
+    }
+
+    public void setIdLog(String idLog) {
+        this.idLog = idLog;
+    }
+
+    public String getPertemuanDosen() {
+        return pertemuanDosen;
+    }
+
+    public void setPertemuanDosen(String pertemuanDosen) {
+        this.pertemuanDosen = pertemuanDosen;
+    }
+
+    public String getPertemuanMhs() {
+        return pertemuanMhs;
+    }
+
+    public void setPertemuanMhs(String pertemuanMhs) {
+        this.pertemuanMhs = pertemuanMhs;
     }
 }

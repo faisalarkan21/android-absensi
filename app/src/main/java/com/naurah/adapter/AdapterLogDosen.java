@@ -66,8 +66,18 @@ public class AdapterLogDosen extends RecyclerView.Adapter<AdapterLogDosen.MyView
 
         holder.title.setText(m.getDosen());
         holder.dosen.setText("Kelas : " + m.getYear());
-        holder.genre.setText("Pertemuan Ke : " + m.getPertemuan());
+//        holder.genre.setText("Pertemuan Ke : " + m.getPertemuan());
         holder.year.setText(m.getPlaceAndTime());
+        if (m.getTime().equals("Belum Input Lokasi")) {
+            holder.genre.setText("");
+        }else if (m.getIdLog() == null  || m.getVerified() == null) {
+
+            holder.genre.setText("Belum Terverifikasi");
+        } else if (m.getIdLog() == null  || !m.getVerified() ) {
+            holder.genre.setText("Anda Tidak Datang");
+        } else {
+            holder.genre.setText("Anda Sudah Terverifikasi");
+        }
 
     }
 

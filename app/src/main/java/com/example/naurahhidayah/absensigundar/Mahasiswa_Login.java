@@ -93,7 +93,7 @@ public class Mahasiswa_Login extends AppCompatActivity {
 
                         JSONObject jsonObject = new JSONObject(rawResponse.body().string());
                         final String dataStatus = jsonObject.getString("isValid");
-                        Log.d("coba", dataStatus);
+                        Log.d("coba", jsonObject.toString());
 
 
                         if (!Boolean.parseBoolean(dataStatus)){
